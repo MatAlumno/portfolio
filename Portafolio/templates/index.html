@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Inicio — {{ section.title }}{% endblock %}
+
+{% block content %}
+<div class="hero p-5 mb-4 rounded">
+  <h1 class="display-6">{{ section.title }}</h1>
+  <div class="lead mt-3">{{ section.content|safe }}</div>
+
+  {% if current_user.is_authenticated and current_user.is_admin %}
+    <hr>
+    <h5>Editar sección (inline)</h5>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      <div class="mb-2">
+        {{ form.title.label }} {{ form.title(class="form-control") }}
+      </div>
+      <div class="mb-2">
+        {{ form.content.label }} {{ form.content(class="form-control", rows="6") }}
+      </div>
+      <div class="mb-2">
+        {{ form.image_url.label }} {{ form.image_url(class="form-control") }}
+      </div>
+      <button class="btn btn-primary" type="submit">{{ form.submit.label.text }}</button>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+CREATE DATABASE portfolio_db;
+USE portfolio_db;
+
+-- Usuario administrador (solo vos)
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL
+);
+
+-- Info de la sección "Sobre mí"
+CREATE TABLE datos_personales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    descripcion TEXT,
+    avatar_url VARCHAR(255),   -- imagen recortada / avatar
+    fondo_url VARCHAR(255)     -- imagen background grande
+);
+
+-- Sección trayecto / educación / experiencia
+CREATE TABLE trayecto (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(100),
+    descripcion TEXT,
+    fecha_inicio DATE,
+    fecha_fin DATE
+);
+
+-- Proyectos mostrados en la página de proyectos
+CREATE TABLE proyectos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100),
+    descripcion TEXT,
+    link VARCHAR(255)          -- link al repo o preview
+);
+
+-- Contenido flexible para textos sueltos por página
+CREATE TABLE contenido (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    seccion VARCHAR(50),       -- index | sobre_mi | personal | trayecto | proyectos
+    titulo VARCHAR(100),
+    texto TEXT
+);
+
+-- Usuario inicial (hash de contraseña se reemplaza luego en Flask)
+INSERT INTO usuarios (username, password_hash) VALUES
+('mateo', '$2b$12$HASH_DE_EJEMPLO_LO_CAMBIAMOS_DESPUES');
+
+-- Contenido mínimo inicial
+INSERT INTO contenido (seccion, titulo, texto) VALUES
+('index', 'Bienvenido a mi Portfolio', 'Pronto verás mi presentación aquí.'),
+('sobre_mi', 'Sobre mí', 'Soy Mateo, desarrollador y creador de esta página.'),
+('personal', 'Información Personal', 'Aquí irá información más detallada.'),
+('trayecto', 'Trayectoria', 'Estudios, experiencia laboral y formación.'),
+('proyectos', 'Proyectos', 'Los trabajos más destacados que realicé.');
