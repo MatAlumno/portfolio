@@ -1,47 +1,16 @@
 {% extends "base.html" %}
-{% block title %}Proyectos{% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md-8">
-    <h2>Proyectos</h2>
-    <div class="d-flex flex-wrap gap-3">
-      {% for p in projects %}
-        <div class="card project-card p-3" style="width:300px;">
-          <h5>{{ p.title }}</h5>
-          <div class="small mb-2">{{ p.description }}</div>
-          {% if p.link %}
-            <a href="{{ p.link }}" target="_blank">Ver proyecto</a>
-          {% endif %}
-          {% if current_user.is_authenticated and current_user.is_admin %}
-            <div class="mt-2">
-              <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('proyecto_edit', pid=p.id) }}">Editar</a>
-            </div>
-          {% endif %}
-        </div>
-      {% else %}
-        <p>No hay proyectos aún.</p>
-      {% endfor %}
-    </div>
-  </div>
+<h1>{{ page.titulo }}</h1>
+<p>{{ page.texto }}</p>
 
-  <div class="col-md-4">
-    {% if current_user.is_authenticated and current_user.is_admin %}
-      <div class="card p-3">
-        <h5>Agregar proyecto</h5>
-        <form method="POST">
-          {{ form.hidden_tag() }}
-          {{ form.title(class="form-control mb-2", placeholder="Título") }}
-          {{ form.description(class="form-control mb-2", rows="4", placeholder="Descripción") }}
-          {{ form.link(class="form-control mb-2", placeholder="URL opcional") }}
-          {{ form.image_url(class="form-control mb-2", placeholder="URL imagen") }}
-          <div class="form-check mb-2">
-            {{ form.visible(class="form-check-input") }} <label class="form-check-label">Visible</label>
-          </div>
-          <button class="btn btn-success">{{ form.submit.label.text }}</button>
-        </form>
-      </div>
-    {% endif %}
-  </div>
-</div>
+<ul>
+{% for p in proyectos %}
+    <li>
+        <strong>{{ p.nombre }}</strong><br>
+        {{ p.descripcion }}<br>
+        <a href="{{ p.link }}" target="_blank">Ver</a>
+    </li>
+{% endfor %}
+</ul>
 {% endblock %}

@@ -1,90 +1,61 @@
-from flask import Flask, render_template, request, redirect, session
-from connect import get_connection
-from werkzeug.security import check_password_hash
-from flask import url_for
+from flask import Flask, render_template
+from connect import get_db
 
 app = Flask(__name__)
-app.secret_key = "clave-re-privada"  # Cambiar después
 
-# Función para obtener texto de sección
-def get_section(section):
-    conn = get_connection()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM contenido WHERE seccion=%s", (section,))
-    data = cursor.fetchone()
-    conn.close()
-    return data
+def obtener_contenido(seccion):
+    db = get_db()
+    with db.cursor() as cursor:
+        cursor.execute("SELECT titulo, texto FROM contenido WHERE seccion=%s", (seccion,))
+        return cursor.fetchone()
 
-# Página principal
 @app.route("/")
 def index():
-    data = get_section("index")
-    return render_template("index.html", data=data)
+    page = obtener_contenido("index")
+    return render_template("index.html", page=page)
 
 @app.route("/sobre_mi")
 def sobre_mi():
-    data = get_section("sobre_mi")
-    return render_template("sobre_mi.html", data=data)
+    db = get_db()
+    page = obtener_contenido("sobre_mi")
+
+    with db.cursor() as cursor:
+        cursor.execute("SELECT * FROM datos_personales LIMIT 1")
+        datos = cursor.fetchone()
+
+    return render_template("sobre_mi.html", page=page, datos=datos)
 
 @app.route("/personal")
 def personal():
-    data = get_section("personal")
-    return render_template("personal.html", data=data)
+    page = obtener_contenido("personal")
+    return render_template("personal.html", page=page)
 
 @app.route("/trayecto")
 def trayecto():
-    data = get_section("trayecto")
-    return render_template("trayecto.html", data=data)
+    db = get_db()
+    page = obtener_contenido("trayecto")
+
+    with db.cursor() as cursor:
+        cursor.execute("SELECT * FROM trayecto ORDER BY fecha_inicio DESC")
+        lista_trayecto = cursor.fetchall()
+
+    return render_template("trayecto.html", page=page, trayecto=lista_trayecto)
 
 @app.route("/proyectos")
 def proyectos():
-    data = get_section("proyectos")
-    return render_template("proyectos.html", data=data)
+    db = get_db()
+    page = obtener_contenido("proyectos")
 
-# Login
-@app.route("/login", methods=["GET", "POST"])
+    with db.cursor() as cursor:
+        cursor.execute("SELECT * FROM proyectos")
+        lista_proyectos = cursor.fetchall()
+
+    return render_template("proyectos.html", page=page, proyectos=lista_proyectos)
+
+@app.route("/login")
 def login():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-
-        conn = get_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM usuario WHERE username=%s", (username,))
-        user = cursor.fetchone()
-        conn.close()
-
-        if user and check_password_hash(user["password_hash"], password):
-            session["user"] = username
-            return redirect("/")
-        else:
-            return "Login incorrecto"
-
-    return render_template("login.html")
-
-# Editar secciones
-@app.route("/editar/<seccion>", methods=["GET", "POST"])
-def editar(seccion):
-    if "user" not in session:
-        return redirect("/login")
-
-    if request.method == "POST":
-        nuevo_texto = request.form["texto"]
-        conn = get_connection()
-        cursor = conn.cursor()
-        cursor.execute("UPDATE contenido SET texto=%s WHERE seccion=%s", (nuevo_texto, seccion))
-        conn.commit()
-        conn.close()
-        return redirect(url_for(seccion))
-
-    data = get_section(seccion)
-    return render_template("editar.html", data=data)
-    
-# Logout
-@app.route("/logout")
-def logout():
-    session.clear()
-    return redirect("/")
+    page = obtener_contenido("login")
+    return render_template("login.html", page=page)
 
 if __name__ == "__main__":
     app.run(debug=True)

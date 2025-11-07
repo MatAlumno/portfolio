@@ -1,31 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
 <head>
-    <title>Portfolio</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+  <meta charset="UTF-8">
+  <title>{{ page.titulo if page else "Portfolio" }}</title>
 </head>
+
 <body>
 
-<nav>
-    <a href="/">Inicio</a>
-    <a href="/sobre_mi">Sobre mí</a>
-    <a href="/personal">Personal</a>
-    <a href="/trayecto">Trayecto</a>
-    <a href="/proyectos">Proyectos</a>
+  <header>
+    <nav>
+      <a href="/">INICIO</a>
+      <a href="/sobre-mi">SOBRE MÍ</a>
+      <a href="/personal">PERSONAL</a>
+      <a href="/trayecto">TRAYECTO</a>
+      <a href="/proyectos">PROYECTOS</a>
+      <a href="/login">LOGIN</a>
+    </nav>
+  </header>
 
-    {% if session.user %}
-    <a href="/logout">Cerrar sesión</a>
-    {% else %}
-    <a href="/login">Login</a>
-    {% endif %}
-</nav>
-
-<main>
-    {% block content %}{% endblock %}
-</main>
+  <main>
+    
+  </main>
 
 </body>
+
 </html>
+
 
 <!-- 
 <!doctype html>
