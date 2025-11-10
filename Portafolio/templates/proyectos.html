@@ -1,16 +1,36 @@
 {% extends "base.html" %}
+{% block title %}Proyectos — Portfolio{% endblock %}
 
 {% block content %}
-<h1>{{ page.titulo }}</h1>
-<p>{{ page.texto }}</p>
 
-<ul>
-{% for p in proyectos %}
-    <li>
-        <strong>{{ p.nombre }}</strong><br>
-        {{ p.descripcion }}<br>
-        <a href="{{ p.link }}" target="_blank">Ver</a>
-    </li>
-{% endfor %}
-</ul>
+<div class="container">
+
+  <h1 style="margin-bottom:18px;">{{ page.titulo }}</h1>
+  <p style="color:var(--muted); margin-bottom:40px;">{{ page.texto }}</p>
+
+  {% for p in proyectos %}
+  <div class="card">
+    <h2>{{ p.nombre }}</h2>
+    <p>{{ p.descripcion }}</p>
+
+    {% if p.link %}
+    <a href="{{ p.link }}" target="_blank" style="
+      display:inline-block;
+      margin-top:14px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      color:var(--accent);
+      border-bottom:2px solid transparent;
+      padding-bottom:2px;
+      transition:120ms;
+    " onmouseover="this.style.borderBottomColor='var(--accent)'" onmouseout="this.style.borderBottomColor='transparent'">
+      Ver proyecto →
+    </a>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+</div>
+
 {% endblock %}
