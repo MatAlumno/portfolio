@@ -3,4 +3,8 @@
 {% block content %}
 <h1>{{ page.titulo }}</h1>
 <p>{{ page.texto }}</p>
+
+<div class="centro">
+    <a class="btn" href="{{ url_for('sobre_mi') }}">Sobre mí</a>
+</div>
 {% endblock %}

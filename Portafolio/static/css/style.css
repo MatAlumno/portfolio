@@ -78,6 +78,10 @@ footer {
   color: var(--muted);
 }
 
+/* MAIN */
+main {
+  margin: 3vh 10vw 5vh;
+}
 /* FORMS */
 form label {
   display:block;

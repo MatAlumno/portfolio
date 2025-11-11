@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ page.titulo }}</h1>
-<p>{{ page.texto }}</p>
+<h1 class="mb-4">{{ page.titulo }}</h1>
+<p class="mb-4">{{ page.texto }}</p>
 
-<ul>
-{% for item in trayecto %}
-    <li>
+<ul class="list-group">
+    {% for item in trayecto %}
+    <li class="list-group-item">
         <strong>{{ item.titulo }}</strong><br>
-        {{ item.descripcion }}<br>
-        {{ item.fecha_inicio }} → {{ item.fecha_fin }}
+        <small class="text-muted">{{ item.fecha_inicio }} → {{ item.fecha_fin }}</small><br>
+        {{ item.descripcion }}
     </li>
-{% endfor %}
+    {% endfor %}
 </ul>
+
 {% endblock %}

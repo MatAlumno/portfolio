@@ -3,4 +3,12 @@
 {% block content %}
 <h1>{{ page.titulo }}</h1>
 <p>{{ page.texto }}</p>
+
+<ul class="lista">
+    {% for dato in datos %}
+    <li>
+        <strong>{{ dato.campo }}:</strong> {{ dato.valor }}
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}

@@ -2,7 +2,8 @@
 {% block title %}Sobre mí — Portfolio{% endblock %}
 
 {% block content %}
-
+<h1>{{ page.titulo }}</h1>
+<p>{{ page.texto }}</p>
 {% if datos %}
 <section class="hero" style="background: url('{{ datos.fondo_url }}') center/cover fixed;">
     <div class="hero-inner">
