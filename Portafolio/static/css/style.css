@@ -179,3 +179,15 @@ i, em {
   border-radius:var(--radius);
   box-shadow:0 0 40px rgba(0,0,0,0.6);
 }
+
+/* NIEBLA */
+#fogCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 50%;
+  z-index: -1; 
+  pointer-events: none;
+  background: black;
+}

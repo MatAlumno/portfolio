@@ -7,11 +7,12 @@
   <title>{% block title %}Portfolio — Mateo{% endblock %}</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
- 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
+
+  <canvas id="fogCanvas"></canvas>
 
   <header>
     <h1>Portfolio — Mateo</h1>
@@ -33,6 +34,8 @@
     <small>© 2025 — Mateo Ricaud</small>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="{{ url_for('static', filename='js/fog.js') }}"></script>
 </body>
 
 </html>
