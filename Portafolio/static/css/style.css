@@ -211,3 +211,21 @@ i, em {
   pointer-events: none;
   background: black;
 }
+
+
+#hand-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 4rem;
+    height: 3rem;
+    pointer-events: none;
+    transform-origin: center center;
+    z-index: 1000;
+}
+
+#hand-cursor img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
