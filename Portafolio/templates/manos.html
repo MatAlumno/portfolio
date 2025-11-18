@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pantalla de Inicio</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+  <canvas id="fogCanvas"></canvas>
+
+  <div id="hand-cursor">
+    <img src="{{ url_for('static', filename='img/hand.png') }}" alt="hand">
+  </div>
+
+  <div class="center-start">
+      <h1>Entrar</h1>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="{{ url_for('static', filename='js/fog.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/hand.js') }}"></script>
+
+  <script>
+      document.body.addEventListener("click", () => {
+          window.location.href = "{{ url_for('index') }}";
+      });
+  </script>
+
+</body>
+</html>

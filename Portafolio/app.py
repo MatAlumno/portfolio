@@ -11,6 +11,11 @@ def obtener_contenido(seccion):
 
 @app.route("/")
 def index():
+    page = obtener_contenido("manos")
+    return render_template("manos.html", page=page)
+
+@app.route("/inicio")
+def inicio():
     page = obtener_contenido("index")
     return render_template("index.html", page=page)
 
