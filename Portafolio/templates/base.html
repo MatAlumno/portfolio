@@ -22,10 +22,15 @@
       <a href="{{ url_for('personal') }}">Personal</a>
       <a href="{{ url_for('trayecto') }}">Trayecto</a>
       <a href="{{ url_for('proyectos') }}">Proyectos</a>
-      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('blog') }}">Blog</a>
 
-
+      {% if session.user_id %}
+          <a href="{{ url_for('logout') }}">Logout ({{ session.username }})</a>
+      {% else %}
+          <a href="{{ url_for('login') }}">Login</a>
+      {% endif %}
     </nav>
+
   </header>
 
   <main>

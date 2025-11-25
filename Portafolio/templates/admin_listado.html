@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Editar {{ seccion }}{% endblock %}
+
+{% block content %}
+<h2>Administrar {{ tabla }}</h2>
+
+<a href="{{ url_for('admin_nuevo', tabla=tabla) }}">Nuevo</a>
+
+<table>
+    <tr>
+        {% for campo in filas[0].keys() %}
+            <th>{{ campo }}</th>
+        {% endfor %}
+        <th>Acciones</th>
+    </tr>
+
+    {% for f in filas %}
+        <tr>
+            {% for valor in f.values() %}
+                <td>{{ valor }}</td>
+            {% endfor %}
+            <td>
+                <a href="{{ url_for('admin_editar', tabla=tabla, id=f.id) }}">Editar</a>
+                <a href="{{ url_for('admin_eliminar', tabla=tabla, id=f.id) }}">Eliminar</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

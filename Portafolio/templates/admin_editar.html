@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Editar {{ seccion }}{% endblock %}
+
+{% block content %}
+<h2>Editando {{ tabla }}</h2>
+
+<form method="POST">
+
+    {% for campo, valor in fila.items() %}
+        {% if campo != 'id' %}
+            <label>{{ campo }}</label>
+            <input type="text" name="{{ campo }}" value="{{ valor }}">
+        {% endif %}
+    {% endfor %}
+
+    <button>Guardar</button>
+</form>
+{% endblock %}

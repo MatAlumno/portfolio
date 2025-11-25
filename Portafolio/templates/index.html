@@ -1,10 +1,45 @@
 {% extends "base.html" %}
+{% block title %}Inicio — Mateo{% endblock %}
 
 {% block content %}
-<h1>{{ page.titulo }}</h1>
-<p>{{ page.texto }}</p>
 
-<div class="centro">
-    <a class="btn" href="{{ url_for('sobre_mi') }}">Sobre mí</a>
+
+
+<!-- SECCIÓN 1: Imagen izquierda — Texto derecha -->
+<div class="intro-section">
+
+    <!-- Imagen cuadrada -->
+    <div class="intro-img">
+        <img src="{{ datos.avatar_url }}" alt="Foto de Mateo">
+    </div>
+
+    <!-- Texto principal (contenido desde DB) -->
+    <div class="intro-text">
+        <h2>{{ page.titulo }}</h2>
+        <p>{{ page.texto }}</p>
+    </div>
 </div>
+
+<!-- SECCIÓN 2: Info extra -->
+<div class="extra-info">
+
+    <h3>Información general</h3>
+
+    <ul>
+        <li><strong>Nombre:</strong> {{ datos.nombre }}</li>
+        <li><strong>Edad:</strong> {{ datos.edad }}</li>
+        <li><strong>País:</strong> {{ datos.pais }}</li>
+        <li><strong>Profesión:</strong> {{ datos.profesion }}</li>
+    </ul>
+
+</div>
+
+{% if session.user_id %}
+    <a class="btn btn-warning btn-sm"
+       href="{{ url_for('admin_editar', tabla='index', id=1) }}">
+        Editar esta sección
+    </a>
+{% endif %}
+
+
 {% endblock %}

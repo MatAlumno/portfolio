@@ -1,40 +1,35 @@
-CREATE DATABASE portfolio_db;
+DROP DATABASE portfolio_db;
+CREATE DATABASE IF NOT EXISTS portfolio_db;
 USE portfolio_db;
 
--- ---------------------------------------------------------
--- USUARIOS (solo vos)
--- ---------------------------------------------------------
-CREATE TABLE usuarios (
+-- USUARIOS
+CREATE TABLE IF NOT EXISTS usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL
 );
 
 INSERT INTO usuarios (username, password_hash)
-VALUES ('admin', 'ACA_VA_EL_HASH');
--- luego generamos el hash real
+VALUES ('mateo', 'scrypt:32768:8:1$mfHfJ34aDLIixknf$86de5c58300e160f463d415a390d169066b87683945501cf2d820ebd7ccfe25f3ea640c98dce9d9ad5ffb4a5a2fa623fe542dc38f15a7aa188e0c1b8ca9b0eb7');
 
 
--- ---------------------------------------------------------
--- CONTENIDO GENERAL POR SECCIÓN
--- ---------------------------------------------------------
-CREATE TABLE contenido (
+-- CONTENIDO GENERAL
+CREATE TABLE IF NOT EXISTS contenido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     seccion VARCHAR(50) NOT NULL,
     titulo VARCHAR(150),
     texto TEXT
 );
--- Ejemplos:
+
 INSERT INTO contenido (seccion, titulo, texto) VALUES
-('index', 'Bienvenido a mi portfolio', 'Esta es la página principal.'),
-('sobre_mi', 'Sobre mí', 'Descripción sobre mí...'),
-('personal', 'Mi lado personal', 'Habilidades, gustos y más.');
+('inicio', 'Bienvenido a mi portfolio', 'Esta es la página principal.'),
+('sobre_mi', 'Sobre mí', 'Un repaso completo de mi identidad, mi personalidad, mis artes, mis gustos y mi forma de vivir y pensar.'),
+('personal', 'Mi lado personal', 'Mi historia, mis influencias y lo que me construyó.'),
+('contacto', 'Contacto', 'Mis redes y formas de comunicarte conmigo.');
 
 
--- ---------------------------------------------------------
 -- DATOS PERSONALES
--- ---------------------------------------------------------
-CREATE TABLE datos_personales (
+CREATE TABLE IF NOT EXISTS datos_personales (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(120),
     descripcion TEXT,
@@ -42,58 +37,115 @@ CREATE TABLE datos_personales (
     fondo_url VARCHAR(255),
     edad INT,
     pais VARCHAR(120),
-    profesion VARCHAR(120),
-    frase TEXT
+    ocupacion VARCHAR(120)
+);
+
+INSERT INTO datos_personales (nombre, descripcion, avatar_url, fondo_url, edad, pais, ocupacion)
+VALUES (
+    'Mateo Ricaud Mercado',
+    'Soy un pibe creativo, introspectivo y disciplinado. Mezcla rara entre sensibilidad artística y pensamiento lógico. Me gustan las ciudades, la noche, la estética industrial, gótica y japonesa. La música, la cocina y el arte son mis refugios. Busco una vida donde pueda crear cosas reales, mantener mi paz interna y vivir con propósito.',
+    '/img/avatar.jpg',
+    '/img/fondo.jpg',
+    17,
+    'Argentina',
+    'Artista / Programador / Cocinero en formación'
 );
 
 
--- ---------------------------------------------------------
--- HABILIDADES (para página PERSONAL)
--- ---------------------------------------------------------
-CREATE TABLE habilidades (
+-- HABILIDADES
+CREATE TABLE IF NOT EXISTS habilidades (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(120),
     tipo ENUM('blanda','dura'),
-    nivel INT, -- 1 a 100
+    nivel INT,
     icono_url VARCHAR(255)
 );
 
+INSERT INTO habilidades (nombre, tipo, nivel, icono_url) VALUES
+('JavaScript', 'dura', 85, '/icons/js.png'),
+('HTML', 'dura', 90, '/icons/html.png'),
+('CSS', 'dura', 80, '/icons/css.png'),
+('Python', 'dura', 70, '/icons/python.png'),
+('C++', 'dura', 65, '/icons/cpp.png'),
+('Diseño estético / visual', 'dura', 75, '/icons/art.png'),
+('Trabajo en equipo', 'blanda', 95, '/icons/team.png'),
+('Comunicación', 'blanda', 88, '/icons/comunicacion.png'),
+('Creatividad', 'blanda', 92, '/icons/creatividad.png'),
+('Disciplina personal', 'blanda', 90, '/icons/focus.png');
 
--- ---------------------------------------------------------
--- GUSTOS (tops, listas, items)
--- ---------------------------------------------------------
-CREATE TABLE gustos_categorias (
+
+-- GUSTOS: CATEGORÍAS
+CREATE TABLE IF NOT EXISTS gustos_categorias (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(120),       -- musica, arte, cocina, juegos, etc
+    nombre VARCHAR(120),
     descripcion TEXT
 );
 
-CREATE TABLE gustos_items (
+INSERT INTO gustos_categorias (nombre, descripcion) VALUES
+('Música', 'Mi colección de géneros, bandas y momentos musicales.'),
+('Cine', 'Películas y estilos cinematográficos que me forman.'),
+('Juegos', 'Obras con estética fuerte, historias densas o mundos melancólicos.'),
+('Comida', 'Platos favoritos y cocina como refugio personal.'),
+('Literatura', 'Autores y obras existenciales, perturbadoras o poéticas que marcaron mi forma de pensar.'),
+('Moda / Estética', 'Diseñadores y estilos visuales que representan mi identidad.');
+
+
+-- GUSTOS ITEMS
+CREATE TABLE IF NOT EXISTS gustos_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     categoria_id INT,
     nombre VARCHAR(120),
     descripcion TEXT,
     imagen_url VARCHAR(255),
-    ranking INT,               -- para tops
+    ranking INT,
     FOREIGN KEY (categoria_id) REFERENCES gustos_categorias(id)
 );
 
+INSERT INTO gustos_items (categoria_id, nombre, descripcion, imagen_url, ranking) VALUES
+-- MÚSICA (ID 1)
+(1, 'Metal', 'Mi núcleo musical: Megadeth, Pantera, Gojira, Slipknot, Sabbath, Rammstein. Energía, crudeza y precisión.', '/img/metal.jpg', 1),
+(1, 'Bossa Nova', 'La música que escucho en mis momentos tranquilos: Laufey, Seu Jorge. Calma, elegancia y nostalgia.', '/img/bossa.jpg', 2),
+(1, 'Clásica', 'Satie, Piccioni, piezas épicas y minimalistas. Música para pensar.', '/img/clasica.jpg', 3),
 
--- ---------------------------------------------------------
--- GALERÍA PERSONAL
--- ---------------------------------------------------------
-CREATE TABLE galeria (
+-- CINE (ID 2)
+(2, 'Interestelar', 'Una de las películas que más me marcó por su estética, música e ideas existenciales.', '/img/interstellar.jpg', 1),
+(2, 'El Fantasma de la Ópera', 'Romanticismo oscuro y teatralidad pura.', '/img/fantasma.jpg', 2),
+
+-- JUEGOS (ID 3)
+(3, 'Blasphemous', 'Obra de arte visual, atmosférica y brutal. Totalmente mi estética.', '/img/blasphemous.jpg', 1),
+(3, 'The Binding of Isaac', 'Juego melancólico, religioso, enfermo y fantástico. Siempre presente.', '/img/isaac.jpg', 2),
+(3, 'Alice: Madness Returns', 'Mi estética hecha videojuego: gótico, emocional, hermoso y perturbado.', '/img/alice.jpg', 3),
+
+-- COMIDA (ID 4)
+(4, 'Pizza', 'Clásica, perfecta, universal.', '/img/pizza.jpg', 1),
+(4, 'Cocina japonesa', 'Minimalismo, técnica y sabor limpio. Un estilo que me inspira.', '/img/japanfood.jpg', 2),
+
+-- LITERATURA (ID 5)
+(5, 'Inio Asano', 'Punpun, Solanin. Historias crudas, depresivas, humanas y hermosas.', '/img/asano.jpg', 1),
+(5, 'Kafka', 'Ansiedad, absurdo y metamorfosis humana. Fundamental.', '/img/kafka.jpg', 2),
+(5, 'Lovecraft', 'Horrores cósmicos, vacío y desesperación.', '/img/lovecraft.jpg', 3),
+
+-- MODA / ESTÉTICA (ID 6)
+(6, 'Yohji Yamamoto', 'Minimalismo japonés, caída de telas, elegancia oscura y silenciosa.', '/img/yohji.jpg', 1),
+(6, 'Rick Owens', 'Industrial, gótico, agresivo pero sofisticado. Mi estética base.', '/img/rick.jpg', 2);
+
+
+-- GALERÍA
+CREATE TABLE IF NOT EXISTS galeria (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(120),
     descripcion TEXT,
     imagen_url VARCHAR(255)
 );
 
+INSERT INTO galeria (titulo, descripcion, imagen_url) VALUES
+('Ciudad de noche', 'Mi ambiente natural: luces, silencio, ruido urbano y pensamiento.', '/galeria/noche.jpg'),
+('Cocina', 'Uno de mis lugares de paz mental.', '/galeria/cocina.jpg'),
+('Sketches', 'Parte de mi lado artístico más íntimo.', '/galeria/sketch.jpg');
 
--- ---------------------------------------------------------
+
 -- TRAYECTO
--- ---------------------------------------------------------
-CREATE TABLE trayecto (
+CREATE TABLE IF NOT EXISTS trayecto (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(120),
     descripcion TEXT,
@@ -102,11 +154,14 @@ CREATE TABLE trayecto (
     icono_url VARCHAR(255)
 );
 
+INSERT INTO trayecto (titulo, descripcion, fecha_inicio, fecha_fin, icono_url) VALUES
+('Secundario', 'Egresado con orientación informática. Base técnica inicial.', '2018-03-01', '2022-12-01', '/icons/school.png'),
+('Formación Full Stack', 'Desarrollo web, lógica, bases de datos, diseño y buenas prácticas.', '2023-01-01', '2023-07-01', '/icons/code.png'),
+('Primer trabajo IT', 'Mi primera experiencia laboral real en tecnología.', '2023-08-01', '2024-02-01', '/icons/work.png');
 
--- ---------------------------------------------------------
+
 -- PROYECTOS
--- ---------------------------------------------------------
-CREATE TABLE proyectos (
+CREATE TABLE IF NOT EXISTS proyectos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(150),
     descripcion TEXT,
@@ -115,18 +170,29 @@ CREATE TABLE proyectos (
     fecha DATE
 );
 
-CREATE TABLE proyectos_tecnologias (
+INSERT INTO proyectos (nombre, descripcion, link, imagen_url, fecha) VALUES
+('Portfolio Web', 'Mi portfolio personal con estética fuerte, diseño propio y secciones dinámicas.', 'https://miportfolio.com', '/proyectos/portfolio.png', '2024-01-10'),
+('App Todo', 'Aplicación de tareas con CRUD completo y backend simple.', 'https://github.com/mateo/todo', '/proyectos/todo.png', '2024-03-15');
+
+
+-- PROYECTOS TECNOLOGÍAS
+CREATE TABLE IF NOT EXISTS proyectos_tecnologias (
     id INT AUTO_INCREMENT PRIMARY KEY,
     proyecto_id INT,
     tecnologia VARCHAR(120),
     FOREIGN KEY (proyecto_id) REFERENCES proyectos(id)
 );
 
+INSERT INTO proyectos_tecnologias (proyecto_id, tecnologia) VALUES
+(1, 'HTML'),
+(1, 'CSS'),
+(1, 'JavaScript'),
+(2, 'React'),
+(2, 'Node.js');
 
--- ---------------------------------------------------------
+
 -- BLOG
--- ---------------------------------------------------------
-CREATE TABLE posts (
+CREATE TABLE IF NOT EXISTS posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(150),
     contenido TEXT,
@@ -134,7 +200,13 @@ CREATE TABLE posts (
     portada_url VARCHAR(255)
 );
 
-CREATE TABLE posts_multimedia (
+INSERT INTO posts (titulo, contenido, fecha, portada_url) VALUES
+('Mi identidad', 'Profundizo en quién soy, qué me mueve y cómo veo el mundo.', NOW(), '/blog/post_identidad.jpg'),
+('Estética oscura japonesa', 'Por qué Yamamoto, Rick Owens y lo gótico-industrial representan mi identidad.', NOW(), '/blog/post_estetica.jpg');
+
+
+-- BLOG MULTIMEDIA
+CREATE TABLE IF NOT EXISTS posts_multimedia (
     id INT AUTO_INCREMENT PRIMARY KEY,
     post_id INT,
     tipo ENUM('imagen','audio','video','archivo','link'),
@@ -143,14 +215,21 @@ CREATE TABLE posts_multimedia (
     FOREIGN KEY (post_id) REFERENCES posts(id)
 );
 
+INSERT INTO posts_multimedia (post_id, tipo, url, descripcion) VALUES
+(1, 'imagen', '/blog/id_img1.jpg', 'Foto que representa mi estética.'),
+(2, 'video', 'https://youtu.be/xxxxx', 'Desglose visual de la estética japonesa oscura.');
 
--- ---------------------------------------------------------
+
 -- CONTACTO
--- ---------------------------------------------------------
-CREATE TABLE contacto (
+CREATE TABLE IF NOT EXISTS contacto (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    tipo VARCHAR(50),            -- email, instagram, github, discord, etc
+    tipo VARCHAR(50),
     valor VARCHAR(255),
     icono_url VARCHAR(255)
 );
 
+INSERT INTO contacto (tipo, valor, icono_url) VALUES
+('email', 'mateo@example.com', '/icons/mail.png'),
+('github', 'https://github.com/mateo', '/icons/github.png'),
+('instagram', '@mateo_dev', '/icons/instagram.png'),
+('discord', 'mateo#1234', '/icons/discord.png');
