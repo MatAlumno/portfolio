@@ -1,55 +1,156 @@
 CREATE DATABASE portfolio_db;
 USE portfolio_db;
 
--- Usuario administrador (solo vos)
+-- ---------------------------------------------------------
+-- USUARIOS (solo vos)
+-- ---------------------------------------------------------
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL
 );
 
--- Info de la sección "Sobre mí"
-CREATE TABLE datos_personales (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100),
-    descripcion TEXT,
-    avatar_url VARCHAR(255),   -- imagen recortada / avatar
-    fondo_url VARCHAR(255)     -- imagen background grande
-);
+INSERT INTO usuarios (username, password_hash)
+VALUES ('admin', 'ACA_VA_EL_HASH');
+-- luego generamos el hash real
 
--- Sección trayecto / educación / experiencia
-CREATE TABLE trayecto (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    titulo VARCHAR(100),
-    descripcion TEXT,
-    fecha_inicio DATE,
-    fecha_fin DATE
-);
 
--- Proyectos mostrados en la página de proyectos
-CREATE TABLE proyectos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100),
-    descripcion TEXT,
-    link VARCHAR(255)          -- link al repo o preview
-);
-
--- Contenido flexible para textos sueltos por página
+-- ---------------------------------------------------------
+-- CONTENIDO GENERAL POR SECCIÓN
+-- ---------------------------------------------------------
 CREATE TABLE contenido (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    seccion VARCHAR(50),       -- index | sobre_mi | personal | trayecto | proyectos
-    titulo VARCHAR(100),
+    seccion VARCHAR(50) NOT NULL,
+    titulo VARCHAR(150),
     texto TEXT
 );
-
--- Usuario inicial (hash de contraseña se reemplaza luego en Flask)
-INSERT INTO usuarios (username, password_hash) VALUES
-('mateo', '$2b$12$HASH_DE_EJEMPLO_LO_CAMBIAMOS_DESPUES');
-
--- Contenido mínimo inicial
+-- Ejemplos:
 INSERT INTO contenido (seccion, titulo, texto) VALUES
-('index', 'Bienvenido a mi Portfolio', 'Pronto verás mi presentación aquí.'),
-('sobre_mi', 'Sobre mí', 'Soy Mateo, desarrollador y creador de esta página.'),
-('personal', 'Información Personal', 'Aquí irá información más detallada.'),
-('trayecto', 'Trayectoria', 'Estudios, experiencia laboral y formación.'),
-('proyectos', 'Proyectos', 'Los trabajos más destacados que realicé.');
+('index', 'Bienvenido a mi portfolio', 'Esta es la página principal.'),
+('sobre_mi', 'Sobre mí', 'Descripción sobre mí...'),
+('personal', 'Mi lado personal', 'Habilidades, gustos y más.');
+
+
+-- ---------------------------------------------------------
+-- DATOS PERSONALES
+-- ---------------------------------------------------------
+CREATE TABLE datos_personales (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(120),
+    descripcion TEXT,
+    avatar_url VARCHAR(255),
+    fondo_url VARCHAR(255),
+    edad INT,
+    pais VARCHAR(120),
+    profesion VARCHAR(120),
+    frase TEXT
+);
+
+
+-- ---------------------------------------------------------
+-- HABILIDADES (para página PERSONAL)
+-- ---------------------------------------------------------
+CREATE TABLE habilidades (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(120),
+    tipo ENUM('blanda','dura'),
+    nivel INT, -- 1 a 100
+    icono_url VARCHAR(255)
+);
+
+
+-- ---------------------------------------------------------
+-- GUSTOS (tops, listas, items)
+-- ---------------------------------------------------------
+CREATE TABLE gustos_categorias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(120),       -- musica, arte, cocina, juegos, etc
+    descripcion TEXT
+);
+
+CREATE TABLE gustos_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    categoria_id INT,
+    nombre VARCHAR(120),
+    descripcion TEXT,
+    imagen_url VARCHAR(255),
+    ranking INT,               -- para tops
+    FOREIGN KEY (categoria_id) REFERENCES gustos_categorias(id)
+);
+
+
+-- ---------------------------------------------------------
+-- GALERÍA PERSONAL
+-- ---------------------------------------------------------
+CREATE TABLE galeria (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(120),
+    descripcion TEXT,
+    imagen_url VARCHAR(255)
+);
+
+
+-- ---------------------------------------------------------
+-- TRAYECTO
+-- ---------------------------------------------------------
+CREATE TABLE trayecto (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(120),
+    descripcion TEXT,
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    icono_url VARCHAR(255)
+);
+
+
+-- ---------------------------------------------------------
+-- PROYECTOS
+-- ---------------------------------------------------------
+CREATE TABLE proyectos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(150),
+    descripcion TEXT,
+    link VARCHAR(255),
+    imagen_url VARCHAR(255),
+    fecha DATE
+);
+
+CREATE TABLE proyectos_tecnologias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    proyecto_id INT,
+    tecnologia VARCHAR(120),
+    FOREIGN KEY (proyecto_id) REFERENCES proyectos(id)
+);
+
+
+-- ---------------------------------------------------------
+-- BLOG
+-- ---------------------------------------------------------
+CREATE TABLE posts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(150),
+    contenido TEXT,
+    fecha DATETIME,
+    portada_url VARCHAR(255)
+);
+
+CREATE TABLE posts_multimedia (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT,
+    tipo ENUM('imagen','audio','video','archivo','link'),
+    url VARCHAR(255),
+    descripcion TEXT,
+    FOREIGN KEY (post_id) REFERENCES posts(id)
+);
+
+
+-- ---------------------------------------------------------
+-- CONTACTO
+-- ---------------------------------------------------------
+CREATE TABLE contacto (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo VARCHAR(50),            -- email, instagram, github, discord, etc
+    valor VARCHAR(255),
+    icono_url VARCHAR(255)
+);
+

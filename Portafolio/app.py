@@ -6,7 +6,10 @@ app = Flask(__name__)
 def obtener_contenido(seccion):
     db = get_db()
     with db.cursor(dictionary=True) as cursor:
-        cursor.execute("SELECT titulo, texto FROM contenido WHERE seccion=%s", (seccion,))
+        cursor.execute(
+            "SELECT titulo, texto FROM contenido WHERE seccion=%s",
+            (seccion,)
+        )
         return cursor.fetchone()
 
 @app.route("/")
@@ -19,7 +22,7 @@ def inicio():
     page = obtener_contenido("index")
     return render_template("index.html", page=page)
 
-@app.route("/sobre-mi")  # ruta limpia
+@app.route("/sobre-mi")
 def sobre_mi():
     db = get_db()
     page = obtener_contenido("sobre_mi")
@@ -41,10 +44,16 @@ def trayecto():
     page = obtener_contenido("trayecto")
 
     with db.cursor(dictionary=True) as cursor:
-        cursor.execute("SELECT * FROM trayecto ORDER BY fecha_inicio DESC")
+        cursor.execute(
+            "SELECT * FROM trayecto ORDER BY fecha_inicio DESC"
+        )
         lista_trayecto = cursor.fetchall()
 
-    return render_template("trayecto.html", page=page, trayecto=lista_trayecto)
+    return render_template(
+        "trayecto.html",
+        page=page,
+        trayecto=lista_trayecto
+    )
 
 @app.route("/proyectos")
 def proyectos():
@@ -55,11 +64,15 @@ def proyectos():
         cursor.execute("SELECT * FROM proyectos")
         lista_proyectos = cursor.fetchall()
 
-    return render_template("proyectos.html", page=page, proyectos=lista_proyectos)
+    return render_template(
+        "proyectos.html",
+        page=page,
+        proyectos=lista_proyectos
+    )
 
 @app.route("/login")
 def login():
-    page = obtener_contenido("personal")  # O si querés crear la sección 'login' en contenido
+    page = obtener_contenido("login")  
     return render_template("login.html", page=page)
 
 if __name__ == "__main__":

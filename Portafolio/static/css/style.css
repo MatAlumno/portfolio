@@ -21,6 +21,10 @@ body {
   font-family: 'Inter', sans-serif;
   line-height:1.5;
   letter-spacing:0.3px;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* LAYOUT */
@@ -67,11 +71,8 @@ nav a:hover {
 
 /* FOOTER */
 footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100%;
-  height: 120px;              /* altura fija del footer (ajustable) */
+  height: 20vh;
   background: var(--surface);
   text-align: center;
   color: var(--muted);
@@ -79,28 +80,33 @@ footer {
   align-items: center;
   justify-content: center;
   padding: 0 10px;
-  z-index: 10;
-  overflow: hidden;           /* evita que la imagen se escape */
+
+  margin-top: auto;
   font-size: 1.4rem;
+  position: relative;
 }
 
-/* Imagen decorativa O *background* del footer */
+.footer-content {
+  position: relative;
+  z-index: 2; 
+}
+
 footer img {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  max-height: 100%;           /* no supera la altura del footer */
-  object-fit: cover;          /* se ajusta sin deformarse */
-  opacity: 0.35;              /* transparencia suave */
-  z-index: -1;                /* queda atrás del texto */
-  pointer-events: none;       /* no tapa clics */
+  max-height: 60vh;
+  opacity: 0.5;
+  z-index: 1; 
+  pointer-events: none;
 }
 
 
 /* MAIN */
 main {
   margin: 3vh 10vw 5vh;
+  flex: 1;
 }
 /* FORMS */
 form label {
@@ -217,15 +223,61 @@ i, em {
     position: fixed;
     top: 0;
     left: 0;
-    width: 4rem;
-    height: 3rem;
+    width: 7rem;
     pointer-events: none;
     transform-origin: center center;
     z-index: 1000;
 }
-
 #hand-cursor img {
     width: 100%;
     height: 100%;
     display: block;
+}
+
+
+.start-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.start-image {
+    width: 90%;
+    object-fit: contain;          /* mantiene la imagen completa */
+    object-position: center;      /* la centra EXACTAMENTE */
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Botón circular con resplandor */
+.glow {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    display: block;
+    position: absolute; /* ESTO ES CLAVE */
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.05);
+    transition: 0.25s ease;
+    z-index: 2; /* ENCIMA de la imagen */
+}
+
+/* Luz */
+.glow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 40px 20px rgba(255, 255, 255, 0);
+    transition: 0.25s ease;
+}
+
+.glow:hover::after {
+    box-shadow: 0 0 100px 45px rgba(255, 255, 255, 0.822);
 }

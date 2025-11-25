@@ -11,23 +11,20 @@
 
   <canvas id="fogCanvas"></canvas>
 
-  <div id="hand-cursor">
-    <img src="{{ url_for('static', filename='img/hand.png') }}" alt="hand">
+  <div id="hand-cursor" style="width: 15rem;">
+    <img src="{{ url_for('static', filename='img/mano1.png') }}" alt="hand">
   </div>
 
-  <div class="center-start">
-      <h1>Entrar</h1>
+  <div class="start-container">
+    <img class="start-image" src="{{ url_for('static', filename='img/manoss.webp') }}" alt="img">
+    <a href="{{ url_for('inicio') }}" class="glow"></a>
   </div>
+
+
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="{{ url_for('static', filename='js/fog.js') }}"></script>
   <script src="{{ url_for('static', filename='js/hand.js') }}"></script>
-
-  <script>
-      document.body.addEventListener("click", () => {
-          window.location.href = "{{ url_for('index') }}";
-      });
-  </script>
 
 </body>
 </html>
