@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Admin — Panel{% endblock %}
+{% block content %}
+<h2>Panel Admin</h2>
+<p>Bienvenido, {{ session.username }} — seleccioná la tabla a administrar:</p>
+
+<ul>
+  {% for t in tablas %}
+    <li><a href="{{ url_for('admin_listado', tabla=t.name) }}">{{ t.label }}</a></li>
+  {% endfor %}
+</ul>
+
+<hr>
+<h3>Editar contenido simple</h3>
+<ul>
+  <li><a href="{{ url_for('admin_contenido_editar', seccion='index') }}">Index</a></li>
+  <li><a href="{{ url_for('admin_contenido_editar', seccion='sobre_mi') }}">Sobre mí</a></li>
+  <li><a href="{{ url_for('admin_contenido_editar', seccion='personal') }}">Personal</a></li>
+  <li><a href="{{ url_for('admin_contenido_editar', seccion='proyectos') }}">Proyectos (texto)</a></li>
+</ul>
+{% endblock %}

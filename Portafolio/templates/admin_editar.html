@@ -1,18 +1,29 @@
 {% extends "base.html" %}
-{% block title %}Editar {{ seccion }}{% endblock %}
-
+{% block title %}Editar — {{ tabla }}{% endblock %}
 {% block content %}
-<h2>Editando {{ tabla }}</h2>
+<h2>Editar — {{ config.label }}</h2>
+<a href="{{ url_for('admin_listado', tabla=tabla) }}">Volver</a>
 
-<form method="POST">
-
-    {% for campo, valor in fila.items() %}
-        {% if campo != 'id' %}
-            <label>{{ campo }}</label>
-            <input type="text" name="{{ campo }}" value="{{ valor }}">
+<form method="POST" enctype="multipart/form-data" style="margin-top:1rem;">
+  {% for campo in campos %}
+    <div style="margin-bottom:0.6rem;">
+      <label>{{ campo }}</label><br>
+      {% set val = fila.get(campo) %}
+      {% if campo.endswith('_url') or 'imagen' in campo or 'avatar' in campo or 'portada' in campo %}
+        {% if val %}
+          <div>Actual: <a href="{{ val }}" target="_blank">{{ val }}</a></div>
         {% endif %}
-    {% endfor %}
-
-    <button>Guardar</button>
+        <input type="file" name="{{ campo }}">
+        <div><small>Si subís un archivo, reemplaza el actual.</small></div>
+      {% elif 'fecha' in campo %}
+        <input type="date" name="{{ campo }}" value="{{ val|string }}">
+      {% elif campo.endswith('_id') %}
+        <input type="number" name="{{ campo }}" value="{{ val }}">
+      {% else %}
+        <input type="text" name="{{ campo }}" value="{{ val }}" style="width:60%;">
+      {% endif %}
+    </div>
+  {% endfor %}
+  <button>Guardar</button>
 </form>
 {% endblock %}

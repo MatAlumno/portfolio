@@ -3,43 +3,40 @@
 
 {% block content %}
 
-
-
-<!-- SECCIÓN 1: Imagen izquierda — Texto derecha -->
-<div class="intro-section">
-
-    <!-- Imagen cuadrada -->
-    <div class="intro-img">
-        <img src="{{ datos.avatar_url }}" alt="Foto de Mateo">
+<div class="intro-section" style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; padding: 3rem;">
+    
+    <div class="intro-img" style="flex: 1 1 300px; display: flex; justify-content: center;">
+        <img src="{{ datos.avatar_url }}" alt="Foto de Mateo" >
+        <img src="/static/img/stock/yiotraje.webp" alt="Foto de Mateo" style="width: 30vw; height: auto; border-radius: 3vw; padding-right: 4vw;">
     </div>
 
-    <!-- Texto principal (contenido desde DB) -->
-    <div class="intro-text">
-        <h2>{{ page.titulo }}</h2>
-        <p>{{ page.texto }}</p>
+    <div class="intro-text" style="flex: 2 1 300px;">
+        <h2 style="margin-bottom: 1rem;">{{ datos.titulo }}</h2>
+        <p style="line-height: 1.6; padding-bottom: 3rem;">{{ datos.texto }}</p>
+        <hr >
+        <div class="extra-info" style="padding-top: 3rem;">
+            <h3>Sobre mí</h3>
+
+            <ul>
+                <li><strong>Nombre:</strong> {{ persona.nombre }}</li>
+                <li><strong>Edad:</strong> {{ persona.edad }}</li>
+                <li><strong>País:</strong> {{ persona.pais }}</li>
+                <li><strong>Profesión:</strong> {{ persona.profesion }}</li>
+            </ul>
+        </div>
     </div>
-</div>
-
-<!-- SECCIÓN 2: Info extra -->
-<div class="extra-info">
-
-    <h3>Información general</h3>
-
-    <ul>
-        <li><strong>Nombre:</strong> {{ datos.nombre }}</li>
-        <li><strong>Edad:</strong> {{ datos.edad }}</li>
-        <li><strong>País:</strong> {{ datos.pais }}</li>
-        <li><strong>Profesión:</strong> {{ datos.profesion }}</li>
-    </ul>
 
 </div>
+
+
+
+
 
 {% if session.user_id %}
-    <a class="btn btn-warning btn-sm"
-       href="{{ url_for('admin_editar', tabla='index', id=1) }}">
-        Editar esta sección
-    </a>
+<a class="btn btn-warning btn-sm"
+    href="{{ url_for('admin_contenido_editar', seccion='index') }}">
+    Editar esta sección
+</a>
 {% endif %}
-
 
 {% endblock %}

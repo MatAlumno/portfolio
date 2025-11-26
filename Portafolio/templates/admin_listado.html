@@ -1,30 +1,39 @@
 {% extends "base.html" %}
-{% block title %}Editar {{ seccion }}{% endblock %}
-
+{% block title %}Admin — {{ tabla }}{% endblock %}
 {% block content %}
-<h2>Administrar {{ tabla }}</h2>
+<h2>Listado: {{ config.label or tabla }}</h2>
 
-<a href="{{ url_for('admin_nuevo', tabla=tabla) }}">Nuevo</a>
+<a href="{{ url_for('admin_nuevo', tabla=tabla) }}">Nuevo</a> |
+<a href="{{ url_for('admin_index') }}">Volver</a>
 
-<table>
+<table style="width:100%; border-collapse: collapse; margin-top: 1rem;">
+  <thead>
     <tr>
-        {% for campo in filas[0].keys() %}
-            <th>{{ campo }}</th>
+      {% if filas|length > 0 %}
+        {% for k in filas[0].keys() %}
+          <th style="border-bottom:1px solid #444; text-align:left; padding:6px;">{{ k }}</th>
         {% endfor %}
         <th>Acciones</th>
+      {% else %}
+        <th>No hay registros</th>
+      {% endif %}
     </tr>
-
-    {% for f in filas %}
-        <tr>
-            {% for valor in f.values() %}
-                <td>{{ valor }}</td>
-            {% endfor %}
-            <td>
-                <a href="{{ url_for('admin_editar', tabla=tabla, id=f.id) }}">Editar</a>
-                <a href="{{ url_for('admin_eliminar', tabla=tabla, id=f.id) }}">Eliminar</a>
-            </td>
-        </tr>
+  </thead>
+  <tbody>
+    {% for fila in filas %}
+      <tr>
+        {% for v in fila.values() %}
+          <td style="padding:6px; border-bottom:1px solid #222;">{{ v }}</td>
+        {% endfor %}
+        <td>
+          <a href="{{ url_for('admin_contenido_editar', seccion=tabla) }}">Editar</a>
+          <form action="{{ url_for('admin_eliminar', tabla=tabla, row_id=fila.id) }}" method="post" style="display:inline;">
+            <button type="submit" onclick="return confirm('Eliminar?')">Borrar</button>
+          </form>
+        </td>
+      </tr>
     {% endfor %}
+  </tbody>
 </table>
 
 {% endblock %}

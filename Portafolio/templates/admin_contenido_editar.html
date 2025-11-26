@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Editar contenido — {{ seccion }}{% endblock %}
+{% block content %}
+<h2>Editar contenido — {{ seccion }}</h2>
+<a href="{{ url_for('admin_index') }}">Volver</a>
+
+<form method="POST" style="margin-top:1rem;">
+  <div>
+    <label>Título</label><br>
+    <input type="text" name="titulo" value="{{ fila.titulo if fila else '' }}" style="width:80%;">
+  </div>
+  <div>
+    <label>Texto</label><br>
+    <textarea name="texto" style="width:80%; height:140px;">{{ fila.texto if fila else '' }}</textarea>
+  </div>
+  <button>Guardar</button>
+</form>
+{% endblock %}

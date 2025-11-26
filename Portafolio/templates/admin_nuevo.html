@@ -1,14 +1,24 @@
 {% extends "base.html" %}
-{% block title %}Editar {{ seccion }}{% endblock %}
-
+{% block title %}Nuevo — {{ tabla }}{% endblock %}
 {% block content %}
-<h2>Nuevo en {{ tabla }}</h2>
+<h2>Nuevo registro — {{ config.label }}</h2>
+<a href="{{ url_for('admin_listado', tabla=tabla) }}">Volver</a>
 
-<form method="POST">
-    {% for campo in fila_ejemplo %}
-        <label>{{ campo }}</label>
-        <input name="{{ campo }}">
-    {% endfor %}
-    <button>Crear</button>
+<form method="POST" enctype="multipart/form-data" style="margin-top:1rem;">
+  {% for campo in campos %}
+    <div style="margin-bottom:0.6rem;">
+      <label>{{ campo }}</label><br>
+      {% if campo.endswith('_url') or 'imagen' in campo or 'avatar' in campo or 'portada' in campo %}
+        <input type="file" name="{{ campo }}">
+      {% elif 'fecha' in campo %}
+        <input type="date" name="{{ campo }}">
+      {% elif campo.endswith('_id') %}
+        <input type="number" name="{{ campo }}">
+      {% else %}
+        <input type="text" name="{{ campo }}" style="width:60%;">
+      {% endif %}
+    </div>
+  {% endfor %}
+  <button>Crear</button>
 </form>
 {% endblock %}

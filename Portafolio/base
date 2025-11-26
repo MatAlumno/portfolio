@@ -1,4 +1,4 @@
-DROP DATABASE portfolio_db;
+DROP DATABASE portfolio_db; 
 CREATE DATABASE IF NOT EXISTS portfolio_db;
 USE portfolio_db;
 
@@ -22,10 +22,17 @@ CREATE TABLE IF NOT EXISTS contenido (
 );
 
 INSERT INTO contenido (seccion, titulo, texto) VALUES
-('inicio', 'Bienvenido a mi portfolio', 'Esta es la página principal.'),
-('sobre_mi', 'Sobre mí', 'Un repaso completo de mi identidad, mi personalidad, mis artes, mis gustos y mi forma de vivir y pensar.'),
-('personal', 'Mi lado personal', 'Mi historia, mis influencias y lo que me construyó.'),
-('contacto', 'Contacto', 'Mis redes y formas de comunicarte conmigo.');
+('inicio', 'Bienvenido a mi mundo', 
+ 'Este portfolio no es solo un espacio profesional: es un diario visual de mis obsesiones, mis estéticas, mis influencias y mis búsquedas. 
+  Acá está lo que soy, lo que creo y lo que me construyó.'),
+('sobre_mi', 'Sobre mí', 
+ 'Soy un equilibrio extraño: sensibilidad artística, pensamiento lógico, estética oscura y una disciplina silenciosa. 
+  Me muevo entre el arte, la programación, la cocina y la filosofía. Mi identidad se forma en la noche, en las ciudades, en la música y en lo simbólico.'),
+('personal', 'Mi lado personal', 
+ 'Soy introspectivo, curioso y observador. Vivo con la necesidad constante de crear, transformar y entender. 
+  Me define la estética industrial, gótica y japonesa, los ambientes densos, la música fuerte y la calma profunda del jazz nocturno.'),
+('contacto', 'Contacto', 
+ 'Podés encontrarme en mis redes, charlar conmigo, ver mis proyectos o simplemente mandarme algo que te haya inspirado.');
 
 
 -- DATOS PERSONALES
@@ -43,8 +50,10 @@ CREATE TABLE IF NOT EXISTS datos_personales (
 INSERT INTO datos_personales (nombre, descripcion, avatar_url, fondo_url, edad, pais, ocupacion)
 VALUES (
     'Mateo Ricaud Mercado',
-    'Soy un pibe creativo, introspectivo y disciplinado. Mezcla rara entre sensibilidad artística y pensamiento lógico. Me gustan las ciudades, la noche, la estética industrial, gótica y japonesa. La música, la cocina y el arte son mis refugios. Busco una vida donde pueda crear cosas reales, mantener mi paz interna y vivir con propósito.',
-    '/img/avatar.jpg',
+    'Persona introspectiva, estética y detallista. Vivo entre lo emocional y lo racional, entre la crudeza del metal y la suavidad del jazz, entre la oscuridad gótica y el minimalismo japonés. 
+     Me interesa la arquitectura, el arte perturbador, la programación creativa y la cocina como forma de calmar la mente. 
+     Mi vida gira en torno a crear: sistemas, historias, imágenes, sabores, estructuras, atmósferas.',
+    '/static/img/stock/yiotraje.webp',
     '/img/fondo.jpg',
     17,
     'Argentina',
@@ -65,13 +74,13 @@ INSERT INTO habilidades (nombre, tipo, nivel, icono_url) VALUES
 ('JavaScript', 'dura', 85, '/icons/js.png'),
 ('HTML', 'dura', 90, '/icons/html.png'),
 ('CSS', 'dura', 80, '/icons/css.png'),
-('Python', 'dura', 70, '/icons/python.png'),
-('C++', 'dura', 65, '/icons/cpp.png'),
-('Diseño estético / visual', 'dura', 75, '/icons/art.png'),
+('Python', 'dura', 75, '/icons/python.png'),
+('C++', 'dura', 70, '/icons/cpp.png'),
+('Diseño estético / visual', 'dura', 90, '/icons/art.png'),
 ('Trabajo en equipo', 'blanda', 95, '/icons/team.png'),
 ('Comunicación', 'blanda', 88, '/icons/comunicacion.png'),
-('Creatividad', 'blanda', 92, '/icons/creatividad.png'),
-('Disciplina personal', 'blanda', 90, '/icons/focus.png');
+('Creatividad', 'blanda', 95, '/icons/creatividad.png'),
+('Disciplina personal', 'blanda', 92, '/icons/focus.png');
 
 
 -- GUSTOS: CATEGORÍAS
@@ -82,12 +91,12 @@ CREATE TABLE IF NOT EXISTS gustos_categorias (
 );
 
 INSERT INTO gustos_categorias (nombre, descripcion) VALUES
-('Música', 'Mi colección de géneros, bandas y momentos musicales.'),
-('Cine', 'Películas y estilos cinematográficos que me forman.'),
-('Juegos', 'Obras con estética fuerte, historias densas o mundos melancólicos.'),
-('Comida', 'Platos favoritos y cocina como refugio personal.'),
-('Literatura', 'Autores y obras existenciales, perturbadoras o poéticas que marcaron mi forma de pensar.'),
-('Moda / Estética', 'Diseñadores y estilos visuales que representan mi identidad.');
+('Música', 'Mi identidad musical va desde la violencia técnica del metal hasta la suavidad triste del jazz nocturno y el minimalismo clásico.'),
+('Cine', 'Historias densas, atmósferas fuertes y estética simbólica. Prefiero lo oscuro, lo existencial, lo visualmente pensado.'),
+('Juegos', 'Me atraen los mundos melancólicos, enfermos, estéticamente cargados o simbólicos.'),
+('Comida', 'La cocina es mi refugio mental: técnica, precisión y sabor como forma de calma.'),
+('Literatura', 'Obras existenciales, perturbadoras, poéticas o filosóficas que moldearon mi forma de pensar.'),
+('Moda / Estética', 'Mi identidad visual: gótico, industrial, minimalista japonés, Rick Owens, Yohji Yamamoto.');
 
 
 -- GUSTOS ITEMS
@@ -102,32 +111,79 @@ CREATE TABLE IF NOT EXISTS gustos_items (
 );
 
 INSERT INTO gustos_items (categoria_id, nombre, descripcion, imagen_url, ranking) VALUES
--- MÚSICA (ID 1)
-(1, 'Metal', 'Mi núcleo musical: Megadeth, Pantera, Gojira, Slipknot, Sabbath, Rammstein. Energía, crudeza y precisión.', '/img/metal.jpg', 1),
-(1, 'Bossa Nova', 'La música que escucho en mis momentos tranquilos: Laufey, Seu Jorge. Calma, elegancia y nostalgia.', '/img/bossa.jpg', 2),
-(1, 'Clásica', 'Satie, Piccioni, piezas épicas y minimalistas. Música para pensar.', '/img/clasica.jpg', 3),
 
--- CINE (ID 2)
-(2, 'Interestelar', 'Una de las películas que más me marcó por su estética, música e ideas existenciales.', '/img/interstellar.jpg', 1),
-(2, 'El Fantasma de la Ópera', 'Romanticismo oscuro y teatralidad pura.', '/img/fantasma.jpg', 2),
+-- MÚSICA (1)
+(1, 'Metal', 
+ 'Mi base emocional: Megadeth, Pantera, Gojira, Slipknot, Sabbath, Rammstein. 
+  Energía, crudeza, distorsión, precisión y un caos que me ordena la cabeza.', 
+ '/img/metal.jpg', 1),
 
--- JUEGOS (ID 3)
-(3, 'Blasphemous', 'Obra de arte visual, atmosférica y brutal. Totalmente mi estética.', '/img/blasphemous.jpg', 1),
-(3, 'The Binding of Isaac', 'Juego melancólico, religioso, enfermo y fantástico. Siempre presente.', '/img/isaac.jpg', 2),
-(3, 'Alice: Madness Returns', 'Mi estética hecha videojuego: gótico, emocional, hermoso y perturbado.', '/img/alice.jpg', 3),
+(1, 'Jazz triste nocturno', 
+ 'Saxos suaves, melodías frágiles, bossa lenta. Laufey, Seu Jorge. Música para caminar de noche y pensar.', 
+ '/img/jazz.jpg', 2),
 
--- COMIDA (ID 4)
-(4, 'Pizza', 'Clásica, perfecta, universal.', '/img/pizza.jpg', 1),
-(4, 'Cocina japonesa', 'Minimalismo, técnica y sabor limpio. Un estilo que me inspira.', '/img/japanfood.jpg', 2),
+(1, 'Clásica minimalista', 
+ 'Erik Satie, piezas solitarias, atmósferas simples que te dejan respirar. Sonido para momentos introspectivos.', 
+ '/img/clasica.jpg', 3),
 
--- LITERATURA (ID 5)
-(5, 'Inio Asano', 'Punpun, Solanin. Historias crudas, depresivas, humanas y hermosas.', '/img/asano.jpg', 1),
-(5, 'Kafka', 'Ansiedad, absurdo y metamorfosis humana. Fundamental.', '/img/kafka.jpg', 2),
-(5, 'Lovecraft', 'Horrores cósmicos, vacío y desesperación.', '/img/lovecraft.jpg', 3),
 
--- MODA / ESTÉTICA (ID 6)
-(6, 'Yohji Yamamoto', 'Minimalismo japonés, caída de telas, elegancia oscura y silenciosa.', '/img/yohji.jpg', 1),
-(6, 'Rick Owens', 'Industrial, gótico, agresivo pero sofisticado. Mi estética base.', '/img/rick.jpg', 2);
+-- CINE (2)
+(2, 'Cine simbólico oscuro', 
+ 'Películas que no solo cuentan algo, sino que construyen una atmósfera. Fotografía pesada, historias densas, emociones reales.', 
+ '/img/cine_oscuro.jpg', 1),
+
+(2, 'Cine existencial', 
+ 'Historias que tocan vacío, propósito, identidad y ansiedad humana. Mi categoría favorita.', 
+ '/img/cine_existen.jpg', 2),
+
+
+-- JUEGOS (3)
+(3, 'Blasphemous', 
+ 'La estética que más se acerca a lo que tengo en la cabeza: brutal, religiosa, hermosa, triste y simbólica.', 
+ '/img/blasphemous.jpg', 1),
+
+(3, 'The Binding of Isaac', 
+ 'Melancolía pura. Religión, trauma, infancia, demonios internos. Un juego tan enfermo como bello.', 
+ '/img/isaac.jpg', 2),
+
+(3, 'Alice: Madness Returns', 
+ 'Fantasía gótica, psicología, trauma y belleza perturbadora. Un reflejo estético de mí mismo.', 
+ '/img/alice.jpg', 3),
+
+
+-- COMIDA (4)
+(4, 'Cocina japonesa', 
+ 'Minimalismo, precisión, respeto por el producto y técnica limpia. La estética del sabor.', 
+ '/img/japanfood.jpg', 1),
+
+(4, 'Pizza', 
+ 'Clásica, perfecta, eterna. Comida universal que nunca falla.', 
+ '/img/pizza.jpg', 2),
+
+
+-- LITERATURA (5)
+(5, 'Inio Asano', 
+ 'Punpun, Solanin. Historias humanas, tristes, reales, existenciales. Obra que me formó emocionalmente.', 
+ '/img/asano.jpg', 1),
+
+(5, 'Kafka', 
+ 'La ansiedad hecha literatura. La metamorfosis, el absurdo, la deshumanización. Un espejo incómodo.', 
+ '/img/kafka.jpg', 2),
+
+(5, 'Lovecraft', 
+ 'Cosmos, insignificancia humana, horror imposible de comprender. Oscuro, frío, perfecto.', 
+ '/img/lovecraft.jpg', 3),
+
+
+-- MODA / ESTÉTICA (6)
+(6, 'Rick Owens', 
+ 'Industria, gótico, agresividad elegante, siluetas duras y un aura oscura que me identifica.', 
+ '/img/rick.jpg', 1),
+
+(6, 'Yohji Yamamoto', 
+ 'Telas sueltas, minimalismo japonés, elegancia silenciosa y espiritual. Mi estética más pura.', 
+ '/img/yohji.jpg', 2);
+
 
 
 -- GALERÍA
@@ -139,9 +195,9 @@ CREATE TABLE IF NOT EXISTS galeria (
 );
 
 INSERT INTO galeria (titulo, descripcion, imagen_url) VALUES
-('Ciudad de noche', 'Mi ambiente natural: luces, silencio, ruido urbano y pensamiento.', '/galeria/noche.jpg'),
-('Cocina', 'Uno de mis lugares de paz mental.', '/galeria/cocina.jpg'),
-('Sketches', 'Parte de mi lado artístico más íntimo.', '/galeria/sketch.jpg');
+('Ciudad de noche', 'Mi hábitat natural: luces frías, ruido urbano, silencio interno.', '/galeria/noche.jpg'),
+('Cocina', 'Espacio donde ordeno mi mente a través de técnica y fuego.', '/galeria/cocina.jpg'),
+('Sketches', 'Mi parte artística más íntima: ideas, símbolos y caos en papel.', '/galeria/sketch.jpg');
 
 
 -- TRAYECTO
@@ -155,9 +211,9 @@ CREATE TABLE IF NOT EXISTS trayecto (
 );
 
 INSERT INTO trayecto (titulo, descripcion, fecha_inicio, fecha_fin, icono_url) VALUES
-('Secundario', 'Egresado con orientación informática. Base técnica inicial.', '2018-03-01', '2022-12-01', '/icons/school.png'),
-('Formación Full Stack', 'Desarrollo web, lógica, bases de datos, diseño y buenas prácticas.', '2023-01-01', '2023-07-01', '/icons/code.png'),
-('Primer trabajo IT', 'Mi primera experiencia laboral real en tecnología.', '2023-08-01', '2024-02-01', '/icons/work.png');
+('Secundario', 'Egresado en informática. Primer contacto con código, lógica y estructuras.', '2018-03-01', '2022-12-01', '/icons/school.png'),
+('Formación Full Stack', 'Aprendí a construir sistemas completos: frontend, backend y bases de datos.', '2023-01-01', '2023-07-01', '/icons/code.png'),
+('Primer trabajo IT', 'Mi acercamiento al mundo real del desarrollo, plazos, clientes y responsabilidad.', '2023-08-01', '2024-02-01', '/icons/work.png');
 
 
 -- PROYECTOS
@@ -171,8 +227,17 @@ CREATE TABLE IF NOT EXISTS proyectos (
 );
 
 INSERT INTO proyectos (nombre, descripcion, link, imagen_url, fecha) VALUES
-('Portfolio Web', 'Mi portfolio personal con estética fuerte, diseño propio y secciones dinámicas.', 'https://miportfolio.com', '/proyectos/portfolio.png', '2024-01-10'),
-('App Todo', 'Aplicación de tareas con CRUD completo y backend simple.', 'https://github.com/mateo/todo', '/proyectos/todo.png', '2024-03-15');
+('Portfolio Web', 
+ 'Proyecto que mezcla estética oscura, minimalismo japonés y mi identidad personal. Hecho desde cero con un enfoque artístico.', 
+ 'https://miportfolio.com', 
+ '/proyectos/portfolio.png', 
+ '2024-01-10'),
+
+('App Todo', 
+ 'Aplicación CRUD que representa mi etapa inicial como dev: simple, ordenada, funcional y sólida.', 
+ 'https://github.com/mateo/todo', 
+ '/proyectos/todo.png', 
+ '2024-03-15');
 
 
 -- PROYECTOS TECNOLOGÍAS
@@ -201,8 +266,17 @@ CREATE TABLE IF NOT EXISTS posts (
 );
 
 INSERT INTO posts (titulo, contenido, fecha, portada_url) VALUES
-('Mi identidad', 'Profundizo en quién soy, qué me mueve y cómo veo el mundo.', NOW(), '/blog/post_identidad.jpg'),
-('Estética oscura japonesa', 'Por qué Yamamoto, Rick Owens y lo gótico-industrial representan mi identidad.', NOW(), '/blog/post_estetica.jpg');
+('Mi identidad', 
+ 'Soy una mezcla rara: estética oscura, pensamiento lógico, emociones intensas, introspección constante y una necesidad de crear algo que tenga sentido. 
+  Esta entrada profundiza en cómo se formó esa identidad y cómo se expresa en mi vida diaria.', 
+ NOW(), 
+ '/blog/post_identidad.jpg'),
+
+('La estética oscura japonesa', 
+ 'Un análisis personal sobre por qué Rick Owens, Yamamoto, lo industrial, lo gótico y el minimalismo forman parte esencial de mi identidad visual. 
+  No es ropa: es lenguaje.', 
+ NOW(), 
+ '/blog/post_estetica.jpg');
 
 
 -- BLOG MULTIMEDIA
@@ -216,8 +290,8 @@ CREATE TABLE IF NOT EXISTS posts_multimedia (
 );
 
 INSERT INTO posts_multimedia (post_id, tipo, url, descripcion) VALUES
-(1, 'imagen', '/blog/id_img1.jpg', 'Foto que representa mi estética.'),
-(2, 'video', 'https://youtu.be/xxxxx', 'Desglose visual de la estética japonesa oscura.');
+(1, 'imagen', '/blog/id_img1.jpg', 'Fotografía que representa mi estética: sombras, textura y silencio.'),
+(2, 'video', 'https://youtu.be/xxxxx', 'Análisis visual de estética japonesa oscura y su impacto emocional.');
 
 
 -- CONTACTO
@@ -229,7 +303,7 @@ CREATE TABLE IF NOT EXISTS contacto (
 );
 
 INSERT INTO contacto (tipo, valor, icono_url) VALUES
-('email', 'mateo@example.com', '/icons/mail.png'),
-('github', 'https://github.com/mateo', '/icons/github.png'),
-('instagram', '@mateo_dev', '/icons/instagram.png'),
-('discord', 'mateo#1234', '/icons/discord.png');
+('email', 'mateoricaudm@gmail.com', '/icons/mail.png'),
+('github', 'https://github.com/MatAlumno', '/icons/github.png'),
+('instagram', '@kurai.matt', '/icons/instagram.png'),
+('discord', 'kaida.cat', '/icons/discord.png');
