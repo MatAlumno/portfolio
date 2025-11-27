@@ -241,6 +241,51 @@ def admin_eliminar(tabla, row_id):
 # -------------------
 # EDITAR CONTENIDO POR SECCION (CORREGIDO)
 # -------------------
+@app.route("/admin/editar/<tabla>/<int:item_id>", methods=["GET", "POST"])
+@login_required
+def admin_editar(tabla, item_id):
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+
+    # Obtener columnas de la tabla
+    cursor.execute(f"DESCRIBE {tabla}")
+    columnas = cursor.fetchall()
+
+    # Obtener registro a editar
+    cursor.execute(f"SELECT * FROM {tabla} WHERE id = %s", (item_id,))
+    registro = cursor.fetchone()
+
+    if not registro:
+        return "No existe el registro", 404
+
+    if request.method == "POST":
+        # Armamos UPDATE dinámico
+        campos = []
+        valores = []
+
+        for col in columnas:
+            nombre = col['Field']
+
+            if nombre == "id":  
+                continue  # No editamos el ID
+
+            valor = request.form.get(nombre)
+            campos.append(f"{nombre}=%s")
+            valores.append(valor)
+
+        valores.append(item_id)
+
+        query = f"UPDATE {tabla} SET {', '.join(campos)} WHERE id=%s"
+        cursor.execute(query, valores)
+        db.commit()
+
+        return redirect(url_for("admin_listado", tabla=tabla))
+
+
+    return render_template("admin_editar.html", tabla=tabla, columnas=columnas, registro=registro)
+
+
+
 @app.route("/admin/contenido/editar/<seccion>", methods=["GET", "POST"])
 @login_required
 def admin_contenido_editar(seccion):

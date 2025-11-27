@@ -26,10 +26,16 @@
           <td style="padding:6px; border-bottom:1px solid #222;">{{ v }}</td>
         {% endfor %}
         <td>
-          <a href="{{ url_for('admin_contenido_editar', seccion=tabla) }}">Editar</a>
-          <form action="{{ url_for('admin_eliminar', tabla=tabla, row_id=fila.id) }}" method="post" style="display:inline;">
+
+          <a href="{{ url_for('admin_editar', tabla=tabla, item_id=fila.id) }}">
+            Editar
+          </a>
+
+          <form action="{{ url_for('admin_eliminar', tabla=tabla, row_id=fila.id) }}"
+                method="post" style="display:inline;">
             <button type="submit" onclick="return confirm('Eliminar?')">Borrar</button>
           </form>
+
         </td>
       </tr>
     {% endfor %}

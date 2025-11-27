@@ -1,29 +1,28 @@
 {% extends "base.html" %}
-{% block title %}Editar — {{ tabla }}{% endblock %}
-{% block content %}
-<h2>Editar — {{ config.label }}</h2>
-<a href="{{ url_for('admin_listado', tabla=tabla) }}">Volver</a>
 
-<form method="POST" enctype="multipart/form-data" style="margin-top:1rem;">
-  {% for campo in campos %}
-    <div style="margin-bottom:0.6rem;">
-      <label>{{ campo }}</label><br>
-      {% set val = fila.get(campo) %}
-      {% if campo.endswith('_url') or 'imagen' in campo or 'avatar' in campo or 'portada' in campo %}
-        {% if val %}
-          <div>Actual: <a href="{{ val }}" target="_blank">{{ val }}</a></div>
-        {% endif %}
-        <input type="file" name="{{ campo }}">
-        <div><small>Si subís un archivo, reemplaza el actual.</small></div>
-      {% elif 'fecha' in campo %}
-        <input type="date" name="{{ campo }}" value="{{ val|string }}">
-      {% elif campo.endswith('_id') %}
-        <input type="number" name="{{ campo }}" value="{{ val }}">
-      {% else %}
-        <input type="text" name="{{ campo }}" value="{{ val }}" style="width:60%;">
-      {% endif %}
-    </div>
-  {% endfor %}
-  <button>Guardar</button>
-</form>
+{% block content %}
+<div class="admin-container">
+    <h2>Editar {{ tabla }} (ID {{ registro.id }})</h2>
+
+    <form method="POST">
+        {% for col in columnas %}
+            {% if col.Field != "id" %}
+                <label>{{ col.Field }}</label>
+
+                {% if "text" in col.Type %}
+                    <textarea name="{{ col.Field }}" class="form-control">{{ registro[col.Field] }}</textarea>
+
+                {% elif "int" in col.Type or "decimal" in col.Type %}
+                    <input type="number" name="{{ col.Field }}" value="{{ registro[col.Field] }}" class="form-control">
+
+                {% else %}
+                    <input type="text" name="{{ col.Field }}" value="{{ registro[col.Field] }}" class="form-control">
+                {% endif %}
+                <br>
+            {% endif %}
+        {% endfor %}
+
+        <button type="submit" class="btn">Guardar</button>
+    </form>
+</div>
 {% endblock %}

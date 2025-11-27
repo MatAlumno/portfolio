@@ -22,16 +22,35 @@ CREATE TABLE IF NOT EXISTS contenido (
 );
 
 INSERT INTO contenido (seccion, titulo, texto) VALUES
-('inicio', 'Bienvenido a mi mundo', 
+('inicio', 'Bienvenido a mi mundo',
  'Este portfolio no es solo un espacio profesional: es un diario visual de mis obsesiones, mis estéticas, mis influencias y mis búsquedas. 
-  Acá está lo que soy, lo que creo y lo que me construyó.'),
-('sobre_mi', 'Sobre mí', 
+ Acá está lo que soy, lo que creo y lo que me construyó.'),
+
+('sobre_mi', 'Sobre mí',
  'Soy un equilibrio extraño: sensibilidad artística, pensamiento lógico, estética oscura y una disciplina silenciosa. 
-  Me muevo entre el arte, la programación, la cocina y la filosofía. Mi identidad se forma en la noche, en las ciudades, en la música y en lo simbólico.'),
-('personal', 'Mi lado personal', 
+ Me muevo entre el arte, la programación, la cocina y la filosofía. Mi identidad se forma en la noche, en las ciudades, en la música y en lo simbólico.'),
+
+('personal', 'Mi lado personal',
  'Soy introspectivo, curioso y observador. Vivo con la necesidad constante de crear, transformar y entender. 
-  Me define la estética industrial, gótica y japonesa, los ambientes densos, la música fuerte y la calma profunda del jazz nocturno.'),
-('contacto', 'Contacto', 
+ Me define la estética industrial, gótica y japonesa, los ambientes densos, la música fuerte y la calma profunda del jazz nocturno.'),
+
+('trayecto', 'Mi trayectoria',
+ 'No sigo un camino lineal: avanzo por impulsos creativos, proyectos que me atraviesan y desafíos que me obligan a crecer. 
+ Desde la programación hasta la edición digital, la escritura, la cocina y lo simbólico, todo lo que hago construye mi forma de ver el mundo.'),
+
+('proyectos', 'Mis proyectos',
+ 'Acá están las cosas que hago cuando el impulso creativo me agarra fuerte. 
+ Desarrollo aplicaciones, experimentos visuales, escritura, diseños y pequeños mundos digitales. Cada proyecto es una parte de mi universo.'),
+
+('blog', 'Mi blog personal',
+ 'Escribo para ordenar el caos interno. Reflexiones, análisis, curiosidades y pensamientos nocturnos. 
+ No es un blog técnico: es una bitácora estética, emocional y conceptual donde proceso lo que vivo.'),
+
+('gustos', 'Mis gustos',
+ 'Mi gusto se mueve entre la oscuridad y la sutileza: estética brutalista, moda industrial, arquitectura fría, techwear, jazz nocturno, metal, videojuegos atmosféricos, 
+ cine que incomoda y la calma de caminar solo por la ciudad.'),
+
+('contacto', 'Contacto',
  'Podés encontrarme en mis redes, charlar conmigo, ver mis proyectos o simplemente mandarme algo que te haya inspirado.');
 
 
