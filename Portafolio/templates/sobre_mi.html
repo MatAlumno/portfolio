@@ -1,37 +1,157 @@
 {% extends "base.html" %}
-{% block title %}Sobre mí — Portfolio{% endblock %}
 
 {% block content %}
-<section class="page-block">
-    <h1>{{ datos.titulo }}</h1>
-    <p>{{ datos.texto }}</p>
 
-    <a class="btn btn-warning btn-sm"
-    href="{{ url_for('admin_contenido_editar', seccion='sobre_mi') }}">
-        Editar
-    </a>
-</section>
-{% if datos %}
-<section class="hero" style="background: url('{{ datos.fondo_url }}') center/cover fixed;">
-    <div class="hero-inner">
-        <img src="{{ datos.avatar_url }}" alt="Avatar" style="
-      width:130px;
-      height:130px;
-      border-radius:50%;
-      border:3px solid var(--accent);
-      margin-bottom:18px;
-    ">
-        <h2>{{ datos.nombre }}</h2>
-        <p style="color:var(--muted); margin-top:10px;">{{ datos.texto }}</p>
-    </div>
-</section>
 
-<div class="container">
-    <div class="card">
-        <h2>{{ datos.titulo }}</h2>
-        <p>{{ datos.descripcion }}</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>{{ datos.titulo }}</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #0f0f0f;
+        color: #eee;
+        font-family: "Inter", sans-serif;
+    }
+
+    .hero {
+        width: 100%;
+        height: 45vh;
+        background-image: url('{{ persona.fondo_url }}');
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+    }
+
+    .avatar-box {
+        transform: translateY(50%);
+        background: rgba(0,0,0,0.6);
+        padding: 20px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(255,255,255,0.15);
+    }
+
+    .avatar-box img {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #ffffff40;
+    }
+
+    .content {
+        padding: 120px 8vw 50px 8vw;
+        line-height: 1.7;
+        font-size: 1.1rem;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        margin-top: 40px;
+    }
+
+    .info-card {
+        background: #1a1a1a;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px #000;
+        border: 1px solid #ffffff15;
+    }
+
+    .gustos-section {
+        margin-top: 60px;
+        padding: 40px;
+        background: #131313;
+        border-radius: 20px;
+        border: 1px solid #ffffff10;
+        box-shadow: 0 0 30px #000;
+    }
+
+    .gustos-section h2 {
+        margin-top: 0;
+    }
+
+    .btn-gustos {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 22px;
+        background: #222;
+        border-radius: 8px;
+        color: #eee;
+        text-decoration: none;
+        border: 1px solid #ffffff25;
+        transition: 0.2s;
+    }
+
+    .btn-gustos:hover {
+        background: #333;
+        border-color: #ffffff40;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- ============================
+        SECCIÓN HERO
+============================= -->
+<div class="hero">
+    <div class="avatar-box">
+        <img src="{{ persona.avatar_url }}" alt="Foto de {{ persona.nombre }}">
+        <h1 style="margin-top: 15px; font-size: 1.6rem;">{{ persona.nombre }}</h1>
     </div>
 </div>
-{% endif %}
 
+<!-- ============================
+        CONTENIDO PRINCIPAL
+============================= -->
+<div class="content">
+    
+    <h2 style="margin-bottom: 10px;">{{ datos.titulo }}</h2>
+    <p>{{ datos.texto }}</p>
+
+    <div class="info-grid">
+        
+        <div class="info-card">
+            <h3>Quién soy</h3>
+            <p>{{ persona.descripcion }}</p>
+        </div>
+
+        <div class="info-card">
+            <h3>Datos rápidos</h3>
+            <p><strong>Edad:</strong> {{ persona.edad }} años</p>
+            <p><strong>País:</strong> {{ persona.pais }}</p>
+            <p><strong>Ocupación:</strong> {{ persona.ocupacion }}</p>
+        </div>
+
+    </div>
+
+    <!-- ============================
+            SECCIÓN GUSTOS
+    ============================= -->
+    <div class="gustos-section">
+        <h2>Mis gustos</h2>
+        <p>
+            Mis gustos son una parte enorme de quién soy: mi estética, mis influencias,
+            mis obsesiones artísticas, mis géneros favoritos y mis mundos internos.
+            Si querés ver en detalle todo lo que me forma —mis categorías, rankings,
+            análisis y colecciones— podés entrar acá:
+        </p>
+
+        <a href="/gustos" class="btn-gustos">Ver mis gustos en detalle →</a>
+    </div>
+
+</div>
+
+</body>
+</html>
 {% endblock %}

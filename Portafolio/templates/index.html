@@ -6,8 +6,7 @@
 <div class="intro-section" style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; padding: 3rem;">
     
     <div class="intro-img" style="flex: 1 1 300px; display: flex; justify-content: center;">
-        <img src="{{ datos.avatar_url }}" alt="Foto de Mateo" >
-        <img src="/static/img/stock/yiotraje.webp" alt="Foto de Mateo" style="width: 30vw; height: auto; border-radius: 3vw; padding-right: 4vw;">
+        <img src="{{ persona.fondo_url }}" alt="Foto de Mateo" style="width: 30vw; height: auto; border-radius: 3vw; padding-right: 4vw;">
     </div>
 
     <div class="intro-text" style="flex: 2 1 300px;">
@@ -21,7 +20,7 @@
                 <li><strong>Nombre:</strong> {{ persona.nombre }}</li>
                 <li><strong>Edad:</strong> {{ persona.edad }}</li>
                 <li><strong>País:</strong> {{ persona.pais }}</li>
-                <li><strong>Profesión:</strong> {{ persona.profesion }}</li>
+                <li><strong>Ocupacion:</strong> {{ persona.ocupacion }}</li>
             </ul>
         </div>
     </div>

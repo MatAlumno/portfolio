@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Mis Gustos</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #0e0e0e;
+        color: #eee;
+        font-family: "Inter", sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    /* ======= CATEGORÍAS ======= */
+    .category-bar {
+        margin: 40px auto;
+        width: 90%;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .cat-btn {
+        padding: 10px 20px;
+        border-radius: 10px;
+        background: #1c1c1c;
+        border: 1px solid #ffffff20;
+        cursor: pointer;
+        transition: 0.2s;
+        color: #eee;
+    }
+
+    .cat-btn:hover {
+        background: #2a2a2a;
+        border-color: #ffffff40;
+    }
+
+    /* ======= ITEMS GRID ======= */
+    .grid {
+        width: 90%;
+        margin: auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 25px;
+    }
+
+    .card {
+        background: #161616;
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid #ffffff15;
+        box-shadow: 0 0 20px #000;
+        transition: 0.25s;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0 25px #000;
+    }
+
+    .card img {
+        width: 100%;
+        height: 170px;
+        object-fit: cover;
+    }
+
+    .card-content {
+        padding: 15px;
+    }
+
+    .rank {
+        background: #222;
+        padding: 4px 10px;
+        border-radius: 6px;
+        display: inline-block;
+        margin-bottom: 8px;
+        color: #bbb;
+        font-size: 0.85rem;
+    }
+
+    .description {
+        opacity: 0.8;
+        font-size: 0.95rem;
+    }
+</style>
+
+<script>
+    function filtrar(id) {
+        let secciones = document.querySelectorAll(".categoria-section");
+        secciones.forEach(sec => sec.style.display = "none");
+
+        document.getElementById("cat_" + id).style.display = "grid";
+    }
+</script>
+</head>
+
+<body>
+
+<h1>Mis Gustos</h1>
+
+<!-- CATEGORÍAS -->
+<div class="category-bar">
+    {% for cat in categorias %}
+        <div class="cat-btn" onclick="filtrar( {{ cat.id }}) ">{{ cat.nombre }}</div>
+    {% endfor %}
+</div>
+
+<!-- ITEMS POR CATEGORÍA -->
+{% for cat in categorias %}
+    <div id="cat_{{ cat.id }}" class="grid categoria-section" style="{% if not loop.first %}display:none{% endif %}">
+        {% for item in items_por_categoria[cat.id] %}
+            <div class="card">
+                <img src="{{ item.imagen }}" alt="{{ item.nombre }}">
+                <div class="card-content">
+                    <div class="rank">Rank: {{ item.rank }}</div>
+                    <h3>{{ item.nombre }}</h3>
+                    <p class="description">{{ item.descripcion }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endfor %}
+
+</body>
+</html>
+
+
+
+{% endblock %}
