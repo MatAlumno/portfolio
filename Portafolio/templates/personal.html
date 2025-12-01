@@ -1,145 +1,246 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Perfil Profesional</title>
+<div class="personal-container">
+
+    <header class="perfil-header">
+        {% if persona and persona.avatar_url %}
+            <img class="perfil-foto" src="{{ persona.avatar_url }}" alt="{{ persona.nombre }}">
+        {% endif %}
+
+        <div>
+            <h1>{{ persona.nombre or datos.titulo }}</h1>
+            {% if persona and persona.ocupacion %}
+                <p class="ocupacion">{{ persona.ocupacion }}</p>
+            {% endif %}
+        </div>
+    </header>
+
+    {% if datos.titulo %}
+        <h2 class="subtitulo">{{ datos.titulo }}</h2>
+    {% endif %}
+    {% if datos.texto %}
+        <p class="descripcion">{{ datos.texto }}</p>
+    {% endif %}
+
+    {% if session.user_id %}
+        <a class="btn btn-warning btn-sm" href="{{ url_for('admin_contenido_editar', seccion='personal') }}">Editar sección</a>
+    {% endif %}
+
+    
+        <h3>Niveles técnicos</h3>
+        <p class="info-sec">Basado en el campo <code>nivel</code> de la base de datos</p>
+
+        <div class="skills-container">
+            {% for s in skills %}
+                <div class="skill-item">
+                    <div class="skill-info">
+                        {% if s.icono_url %}
+                            <img class="skill-icon" src="{{ s.icono_url }}" alt="">
+                        {% endif %}
+                        <strong>{{ s.nombre }}</strong>
+                        <span class="skill-value">{{ s.nivel }}%</span>
+                    </div>
+
+                    <div class="skill-bar">
+                        <div class="skill-fill" data-width="{{ s.nivel }}"></div>
+                    </div>
+                </div>
+            {% else %}
+                <p>No hay habilidades técnicas cargadas.</p>
+            {% endfor %}
+        </div>
+    
+
+    {% if session.user_id %}
+        <a class="btn btn-secondary btn-sm" href="{{ url_for('admin_listado', tabla='habilidades') }}">Editar habilidades</a>
+    {% endif %}
+
+    <section class="card-section">
+        <div class="dual-grid">
+
+            <div>
+                <h3>Habilidades Blandas</h3>
+                <ul class="lista-habilidades">
+                    {% for h in habilidades_blandas %}
+                        <li>
+                            {% if h.icono_url %}
+                                <img class="hab-icon" src="{{ h.icono_url }}">
+                            {% endif %}
+                            <span>{{ h.nombre }}</span>
+                            {% if h.nivel %}
+                                <span class="hab-nivel">{{ h.nivel }}%</span>
+                            {% endif %}
+                        </li>
+                    {% else %}
+                        <li>No hay habilidades blandas cargadas.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div>
+                <h3>Habilidades Duras</h3>
+                <ul class="lista-habilidades">
+                    {% for h in habilidades_duras %}
+                        <li>
+                            {% if h.icono_url %}
+                                <img class="hab-icon" src="{{ h.icono_url }}">
+                            {% endif %}
+                            <span>{{ h.nombre }}</span>
+                            {% if h.nivel %}
+                                <span class="hab-nivel">{{ h.nivel }}%</span>
+                            {% endif %}
+                        </li>
+                    {% else %}
+                        <li>No hay habilidades duras cargadas.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+</div>
+
+
+<!-- animacion de barras -->
+<script>
+window.addEventListener("load", () => {
+    document.querySelectorAll(".skill-fill").forEach(el => {
+        const w = Math.min(Math.max(parseInt(el.dataset.width), 0), 100);
+        setTimeout(() => el.style.width = w + "%", 80);
+    });
+});
+</script>
 
 <style>
-    .section {
-        width: 80%;
-        margin: 50px auto;
-        padding: 30px;
-        background: #141414;
-        border-radius: 15px;
-        border: 1px solid #ffffff15;
-        box-shadow: 0 0 25px #000;
-    }
+.personal-container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 40px auto;
+}
 
-    .skills-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 40px;
-        margin-top: 25px;
-    }
+/* HEADER */
+.perfil-header {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
 
-    .skill-block h3 {
-        margin-bottom: 15px;
-    }
+.perfil-foto {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+}
 
-    /* ====== BARRAS ====== */
-    .skill-bar {
-        background: #222;
-        border-radius: 10px;
-        height: 12px;
-        overflow: hidden;
-        position: relative;
-        margin-bottom: 15px;
-    }
+.ocupacion {
+    opacity: .8;
+    margin-top: 4px;
+}
 
-    .skill-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #00d9ff, #0090ff);
-        width: 0;
-        border-radius: 10px;
-        transition: width 1.4s ease;
-    }
+/* SECCIONES */
+.card-section {
+    background: #141414;
+    border: 1px solid #ffffff20;
+    border-radius: 14px;
+    padding: 28px;
+    margin-top: 35px;
+    box-shadow: 0 0 15px #0005;
+}
 
+.subtitulo {
+    margin-top: 28px;
+}
+
+.descripcion {
+    white-space: pre-wrap;
+    margin-bottom: 15px;
+}
+
+.info-sec {
+    opacity: .75;
+    margin-bottom: 18px;
+}
+
+/* GRID GENERAL */
+.dual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+/* LISTAS */
+.lista-habilidades {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lista-habilidades li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+}
+
+.hab-icon {
+    width: 22px;
+    height: 22px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.hab-nivel {
+    margin-left: auto;
+    opacity: .7;
+    font-size: .9rem;
+}
+
+/* SKILLS BARS */
+.skills-container {
+    display: grid;
+    gap: 16px;
+}
+
+.skill-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.skill-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.skill-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.skill-value {
+    margin-left: auto;
+    opacity: .75;
+}
+
+.skill-bar {
+    width: 100%;
+    height: 12px;
+    background: #222;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00d9ff, #0090ff);
+    width: 0;
+    transition: width 1.2s ease;
+}
 </style>
 
-<script>
-    // Animación de las barras
-    window.onload = () => {
-        document.querySelectorAll(".skill-fill").forEach(bar => {
-            bar.style.width = bar.dataset.width + "%";
-        });
-    };
-</script>
-</head>
-
-<body>
-
-<h1>Mi Perfil Profesional</h1>
-
-<!-- PROFESIONAL -->
-<div class="section">
-    <h2>Sobre mí (Profesional)</h2>
-    <p>
-        Soy un desarrollador en formación con una mentalidad enfocada en aprender,
-        crear y resolver problemas. Me gusta trabajar con estructuras, datos, lógica,
-        diseño visual, interacción y todo lo que me permita construir experiencias.
-        Tengo interés en backend, APIs, scraping, diseño de interfaces y bases de datos.
-    </p>
-</div>
-
-<!-- HABILIDADES BLANDAS / DURAS -->
-<div class="section">
-    <h2>Habilidades Blandas y Duras</h2>
-
-    <div class="skills-grid">
-
-        <!-- BLANDAS -->
-        <div class="skill-block">
-            <h3>Habilidades Blandas</h3>
-            <ul>
-                <li>Pensamiento analítico</li>
-                <li>Comunicación clara</li>
-                <li>Autonomía de aprendizaje</li>
-                <li>Organización y disciplina</li>
-                <li>Resolución de problemas</li>
-                <li>Creatividad aplicada</li>
-            </ul>
-        </div>
-
-        <!-- DURAS -->
-        <div class="skill-block">
-            <h3>Habilidades Duras</h3>
-            <ul>
-                <li>Diseño de bases de datos</li>
-                <li>Modelado de información</li>
-                <li>Desarrollo web con Flask</li>
-                <li>Manejo de APIs REST</li>
-                <li>Web Scraping</li>
-                <li>Automatización con Python</li>
-            </ul>
-        </div>
-
-    </div>
-</div>
-
-<!-- HABILIDADES DE PROGRAMACIÓN -->
-<div class="section">
-    <h2>Habilidades de Programación</h2>
-    <p>Representación visual de mis niveles aproximados:</p>
-
-    <div style="margin-top: 35px;">
-
-        <h4>C++</h4>
-        <div class="skill-bar"><div class="skill-fill" data-width="75"></div></div>
-
-        <h4>Python</h4>
-        <div class="skill-bar"><div class="skill-fill" data-width="90"></div></div>
-
-        <h4>Java</h4>
-        <div class="skill-bar"><div class="skill-fill" data-width="60"></div></div>
-
-        <h4>HTML / CSS</h4>
-        <div class="skill-bar"><div class="skill-fill" data-width="85"></div></div>
-
-        <h4>JavaScript</h4>
-        <div class="skill-bar"><div class="skill-fill" data-width="70"></div></div>
-
-        <h4>Flask</h4>
-        <div class="skill-bar"><div class="skill-fill" data-width="88"></div></div>
-
-        <h4>SQL</h4>
-        <div class="skill-bar"><div class="skill-fill" data-width="80"></div></div>
-
-    </div>
-</div>
-
-</body>
-</html>
 {% endblock %}

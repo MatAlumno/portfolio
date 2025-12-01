@@ -232,7 +232,7 @@ i, em {
    HERO (Opcional)
 ----------------------------------------------------- */
 .hero {
-  min-height:60vh;
+
   display:flex;
   justify-content:center;
   align-items:center;

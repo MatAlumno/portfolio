@@ -1,17 +1,200 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="mb-4">{{ datos.titulo }}</h1>
-<p class="mb-4">{{ datos.texto }}</p>
 
-<ul class="list-group">
+<div class="trayecto-wrap">
+  <header class="trayecto-header">
+    <h1>{{ datos.titulo }}</h1>
+    {% if datos.texto %}<p class="trayecto-intro">{{ datos.texto }}</p>{% endif %}
+  </header>
+
+  <!-- Contenedor horizontal: las cards quedan una al lado de otra -->
+  <div class="trayecto-row" role="list">
+
     {% for item in trayecto %}
-    <li class="list-group-item">
-        <strong>{{ item.titulo }}</strong><br>
-        <small class="text-muted">{{ item.fecha_inicio }} → {{ item.fecha_fin }}</small><br>
-        {{ item.descripcion }}
-    </li>
+      <article class="trayecto-card" role="listitem" tabindex="0" aria-label="{{ item.titulo }}">
+        {% if item.icono_url %}
+          <div class="card-media">
+            <img src="{{ item.icono_url }}" alt="{{ item.titulo }}">
+          </div>
+        {% endif %}
+
+        <div class="card-body">
+          <h3 class="card-title">{{ item.titulo }}</h3>
+          <div class="card-fecha">{{ item.fecha_inicio }}{% if item.fecha_fin %} → {{ item.fecha_fin }}{% endif %}</div>
+
+          <div class="card-desc">
+            {{ item.descripcion }}
+          </div>
+
+          {% if item.link %}
+            <a class="card-link" href="{{ item.link }}" target="_blank" rel="noopener">Ver más</a>
+          {% endif %}
+        </div>
+      </article>
     {% endfor %}
-</ul>
+
+  </div>
+</div>
+
+<script>
+// Soporta expand al foco (accesibilidad) y hover: agrega/quita clase 'expanded' por teclado
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Enter'){
+    const el = document.activeElement;
+    if(el && el.classList.contains('trayecto-card')){
+      el.classList.toggle('expanded');
+    }
+  }
+});
+</script>
+
+<style>
+/* Contenedor general */
+.trayecto-wrap {
+  width: 94%;
+  max-width: 1200px;
+  margin: 32px auto;
+  padding-bottom: 24px;
+}
+
+/* Header */
+.trayecto-header h1 {
+  margin: 0 0 6px 0;
+}
+.trayecto-intro {
+  margin: 6px 0 18px 0;
+  color: #bbb;
+  max-width: 80ch;
+}
+
+/* ROW: horizontal scroll en pantallas pequeñas, fila fija en desktop */
+.trayecto-row {
+  display: flex;
+  height: 60vh;
+  gap: 20px;
+  align-items: stretch;
+  padding: 4vh 1.5vw;
+  overflow-x: auto; /* permite scrolleo horizontal si no entra */
+  scroll-snap-type: x mandatory;
+}
+
+/* CARD (vertical: alto > ancho) */
+.trayecto-card {
+  background: #131313;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+
+  height: 30vh;           /* alto mayor que ancho -> vertical */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  transition: transform .22s ease, height .22s ease, box-shadow .22s ease;
+  cursor: pointer;
+  scroll-snap-align: start;
+  position: relative;
+}
+
+/* Indica que la card puede recibir foco por teclado */
+.trayecto-card:focus {
+  outline: 2px solid rgba(0,217,255,0.18);
+  outline-offset: 3px;
+}
+
+/* media (imagen superior) */
+.card-media {
+  height: 180px;
+  width: 100%;
+  overflow: hidden;
+  flex: 0 0 180px;
+  background: linear-gradient(180deg,#0f0f0f,#151515);
+}
+.card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display:block;
+  transform-origin: center;
+  transition: transform .3s ease;
+}
+
+/* cuerpo */
+.card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 auto;
+}
+
+/* título y fecha */
+.card-title {
+  margin: 0;
+  font-size: 1.05rem;
+}
+.card-fecha {
+  font-size: .85rem;
+  color: #9aa;
+}
+
+/* descripción: está limitada y se expande en hover */
+.card-desc {
+  color: #d0d0d0;
+  font-size: .95rem;
+  line-height: 1.4;
+  max-height: 5.2rem; /* recorta info (aprox 3 líneas) */
+  overflow: hidden;
+  transition: max-height .25s ease, opacity .2s ease;
+  opacity: .95;
+}
+
+/* link oculto hasta hover/focus */
+.card-link {
+  margin-top: auto;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .22s ease, transform .22s ease;
+  text-decoration: none;
+  color: #00d9ff;
+  font-weight: 600;
+}
+
+/* HOVER / FOCUS: expandir tarjeta para mostrar más */
+.trayecto-card:hover,
+.trayecto-card:focus,
+.trayecto-card.expanded {
+  transform: translateY(-6px) scale(1.1);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.7);
+  height: 45vh;      /* se hace más alta para mostrar más descripción */
+}
+
+/* cuando está expandida, imagen hace zoom y descripción aumenta */
+.trayecto-card:hover .card-media img,
+.trayecto-card:focus .card-media img,
+.trayecto-card.expanded .card-media img {
+  transform: scale(1.15);
+}
+
+.trayecto-card:hover .card-desc,
+.trayecto-card:focus .card-desc,
+.trayecto-card.expanded .card-desc {
+  max-height: 12rem; /* deja ver más texto */
+}
+
+.trayecto-card:hover .card-link,
+.trayecto-card:focus .card-link,
+.trayecto-card.expanded .card-link {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* responsivo: en pantallas muy pequeñas, reducir ancho y altura */
+@media (max-width: 700px) {
+  .trayecto-card { width: 260px; min-width: 260px; height: 380px; }
+  .trayecto-card:hover, .trayecto-card.expanded { height: 460px; }
+  .card-media { height: 150px; flex-basis: 150px; }
+}
+</style>
 
 {% endblock %}

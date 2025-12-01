@@ -105,18 +105,68 @@ def sobre_mi():
 @app.route("/blog")
 def blog():
     db = get_db()
-    page = obtener_contenido("blog") or {}
 
     with db.cursor(dictionary=True) as c:
         c.execute("SELECT * FROM posts ORDER BY fecha DESC")
         posts = c.fetchall()
+        c.execute("SELECT * FROM posts_multimedia")
+        multimedia = c.fetchall()
 
-    return render_template("blog.html", datos=page, posts=posts)
+    multimedia_dict = {}
+    for m in multimedia:
+        multimedia_dict.setdefault(m["post_id"], []).append(m)
+
+    datos = obtener_contenido("blog") or {}
+
+    return render_template(
+        "blog.html",
+        datos=datos,
+        posts=posts,
+        multimedia=multimedia_dict
+    )
+
 
 @app.route("/personal")
 def personal():
+    db = get_db()
     page = obtener_contenido("personal") or {}
-    return render_template("personal.html", datos=page)
+    #Carlitos al rescate
+    with db.cursor(dictionary=True) as c:
+
+        c.execute("SELECT * FROM habilidades ORDER BY tipo, nivel DESC, nombre ASC")
+        habilidades = c.fetchall()
+
+        c.execute("SELECT * FROM datos_personales LIMIT 1")
+        persona = c.fetchone()
+
+    habilidades_blandas = []
+    habilidades_duras = []
+    habilidades_lenguajes = []
+
+    for h in habilidades:
+        tipo = (h.get("tipo") or "").lower()
+        if tipo == "blanda":
+            habilidades_blandas.append(h)
+        elif tipo == "dura":
+            habilidades_duras.append(h)
+        elif tipo == "lenguaje":
+            habilidades_lenguajes.append(h)
+        else:
+            habilidades_duras.append(h)
+
+    if habilidades_lenguajes:
+        skills = sorted(habilidades_lenguajes, key=lambda x: x.get("nivel", 0), reverse=True)
+    else:
+        skills = sorted([h for h in habilidades_duras if h.get("nivel") is not None],
+                        key=lambda x: x.get("nivel", 0), reverse=True)
+    return render_template(
+        "personal.html",
+        datos=page,
+        persona=persona,
+        habilidades_blandas=habilidades_blandas,
+        habilidades_duras=habilidades_duras,
+        skills=skills
+    )
 
 @app.route("/trayecto")
 def trayecto():
@@ -138,8 +188,28 @@ def proyectos():
 
 @app.route("/gustos")
 def gustos():
+    db = get_db()
     page = obtener_contenido("gustos") or {}
-    return render_template("gustos.html", datos=page)
+
+    with db.cursor(dictionary=True) as c:
+        c.execute("SELECT * FROM gustos_categorias ORDER BY id ASC")
+        categorias = c.fetchall()
+
+        c.execute("SELECT * FROM gustos_items ORDER BY ranking ASC")
+        items = c.fetchall()
+
+    items_por_categoria = {}
+    for cat in categorias:
+        items_por_categoria[cat["id"]] = [
+            item for item in items if item["categoria_id"] == cat["id"]
+        ]
+
+    return render_template(
+        "gustos.html",
+        datos=page,
+        categorias=categorias,
+        items_por_categoria=items_por_categoria
+    )
 
 # -------------------
 # LOGIN
