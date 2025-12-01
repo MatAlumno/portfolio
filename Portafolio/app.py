@@ -1,4 +1,3 @@
-# app.py
 from flask import Flask, render_template, request, redirect, session, flash, url_for, abort, send_from_directory
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
@@ -11,8 +10,6 @@ from connect import get_db
 app = Flask(__name__)
 app.secret_key = "parangutirimicuaro"
 
-# -------------------
-# CONFIG
 # -------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "uploads")
@@ -35,8 +32,6 @@ TABLAS_CONFIG = {
     "contacto": {"label": "Contacto", "editable": ["tipo", "valor", "icono_url"]}
 }
 
-# -------------------
-# UTIL
 # -------------------
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -64,16 +59,12 @@ def login_required(f):
     return wrapper
 
 # -------------------
-# OBTENER CONTENIDO
-# -------------------
 def obtener_contenido(seccion):
     db = get_db()
     with db.cursor(dictionary=True) as c:
         c.execute("SELECT titulo, texto, seccion FROM contenido WHERE seccion=%s", (seccion,))
         return c.fetchone()
 
-# -------------------
-# RUTAS PÚBLICAS
 # -------------------
 @app.route("/")
 def manos():
@@ -212,8 +203,6 @@ def gustos():
     )
 
 # -------------------
-# LOGIN
-# -------------------
 @app.route("/login", methods=["GET", "POST"])
 def login():
     page = obtener_contenido("login") or {}
@@ -236,8 +225,7 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
-# -------------------
-# ADMIN INDEX
+
 # -------------------
 @app.route("/admin")
 @login_required
@@ -245,8 +233,6 @@ def admin_index():
     tablas = [{"name": t, "label": cfg["label"]} for t, cfg in TABLAS_CONFIG.items()]
     return render_template("admin_index.html", tablas=tablas)
 
-# -------------------
-# LISTAR / NUEVO / ELIMINAR (GENÉRICO)
 # -------------------
 SECCION_RUTAS = {
     "index": "inicio",
@@ -309,27 +295,21 @@ def admin_eliminar(tabla, row_id):
     return redirect(url_for("admin_listado", tabla=tabla))
 
 # -------------------
-# EDITAR CONTENIDO POR SECCION (CORREGIDO)
-# -------------------
 @app.route("/admin/editar/<tabla>/<int:item_id>", methods=["GET", "POST"])
 @login_required
 def admin_editar(tabla, item_id):
     db = get_db()
     cursor = db.cursor(dictionary=True)
 
-    # Obtener columnas de la tabla
     cursor.execute(f"DESCRIBE {tabla}")
     columnas = cursor.fetchall()
 
-    # Obtener registro a editar
     cursor.execute(f"SELECT * FROM {tabla} WHERE id = %s", (item_id,))
     registro = cursor.fetchone()
 
     if not registro:
         return "No existe el registro", 404
-
     if request.method == "POST":
-        # Armamos UPDATE dinámico
         campos = []
         valores = []
 
@@ -337,8 +317,7 @@ def admin_editar(tabla, item_id):
             nombre = col['Field']
 
             if nombre == "id":  
-                continue  # No editamos el ID
-
+                continue 
             valor = request.form.get(nombre)
             campos.append(f"{nombre}=%s")
             valores.append(valor)
@@ -351,10 +330,7 @@ def admin_editar(tabla, item_id):
 
         return redirect(url_for("admin_listado", tabla=tabla))
 
-
     return render_template("admin_editar.html", tabla=tabla, columnas=columnas, registro=registro)
-
-
 
 @app.route("/admin/contenido/editar/<seccion>", methods=["GET", "POST"])
 @login_required
@@ -367,7 +343,6 @@ def admin_contenido_editar(seccion):
     if request.method == "POST":
         titulo = request.form.get("titulo")
         texto = request.form.get("texto")
-
         if fila:
             with db.cursor() as c:
                 c.execute(
@@ -393,15 +368,12 @@ def admin_contenido_editar(seccion):
 
     return render_template("admin_contenido_editar.html", seccion=seccion, fila=fila)
 
-# -------------------
-# INJECT SESSION
+
 # -------------------
 @app.context_processor
 def inject_user():
     return dict(session=session)
 
-# -------------------
-# RUN
 # -------------------
 if __name__ == "__main__":
     app.run(debug=True)

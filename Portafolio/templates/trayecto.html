@@ -8,7 +8,7 @@
     {% if datos.texto %}<p class="trayecto-intro">{{ datos.texto }}</p>{% endif %}
   </header>
 
-  <!-- Contenedor horizontal: las cards quedan una al lado de otra -->
+  <!-- Contenedor horizontal con cards al lado de otra -->
   <div class="trayecto-row" role="list">
 
     {% for item in trayecto %}
@@ -38,7 +38,6 @@
 </div>
 
 <script>
-// Soporta expand al foco (accesibilidad) y hover: agrega/quita clase 'expanded' por teclado
 document.addEventListener('keydown', function(e){
   if(e.key === 'Enter'){
     const el = document.activeElement;
