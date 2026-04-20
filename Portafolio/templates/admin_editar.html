@@ -3,6 +3,7 @@
 {% block content %}
 <div class="admin-container">
     <h2>Editar {{ tabla }} (ID {{ registro.id }})</h2>
+    <a href="{{ url_for('admin_index') }}">Volver</a>
 
     <form method="POST">
         {% for col in columnas %}

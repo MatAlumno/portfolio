@@ -1,9 +1,14 @@
-import mysql.connector
+import pymysql
 
 def get_db():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="1234",
-        database="portfolio_db"
-    )
+    try:
+        return pymysql.connect(
+            host='localhost',
+            user='root', 
+            password='mazapan0220', 
+            database='portfolio_db',
+            cursorclass=pymysql.cursors.DictCursor
+        )
+    except Exception as e:
+        print(f"Errorazo en la conexión: {e}")
+        return None

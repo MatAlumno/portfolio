@@ -1,24 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>{{ datos.titulo }}</title>
-
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: #0f0f0f;
-        color: #eee;
-        font-family: "Inter", sans-serif;
-    }
-
-    .hero {
+    .hero-profile {
         width: 100%;
         height: 37vh;
         background-image: url('{{ persona.fondo_url }}');
@@ -27,15 +11,18 @@
         display: flex;
         justify-content: center;
         align-items: flex-end;
+        border-bottom: 2px solid var(--border);
     }
 
     .avatar-box {
         transform: translateY(50%);
-        background: rgba(0,0,0,0.6);
-        padding: 20px;
-        border-radius: 20px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 25px;
+        border-radius: var(--radius);
         text-align: center;
-        box-shadow: 0 0 20px rgba(255,255,255,0.15);
+        box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        border: 1px solid var(--border);
+        backdrop-filter: blur(8px);
     }
 
     .avatar-box img {
@@ -43,81 +30,92 @@
         height: 180px;
         border-radius: 50%;
         object-fit: cover;
-        border: 3px solid #ffffff40;
+        border: 2px solid var(--accent);
     }
 
-    .content {
-        padding: 120px 8vw 50px 8vw;
-        line-height: 1.7;
-        font-size: 1.1rem;
+    .profile-content {
+        padding: 120px 8vw 50px;
     }
 
     .info-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
         gap: 25px;
         margin-top: 40px;
+        align-items: start;
     }
 
     .info-card {
-        background: #1a1a1a;
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 0 15px #000;
-        border: 1px solid #ffffff15;
+        background: var(--surface);
+        padding: 25px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        box-shadow: 0 0 20px rgba(0,0,0,0.4);
+
+        overflow-wrap: break-word; 
+        word-wrap: break-word;
+
+    }
+
+    .info-card h3 {
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        color: var(--muted);
     }
 
     .gustos-section {
         margin-top: 60px;
         padding: 40px;
-        background: #131313;
-        border-radius: 20px;
-        border: 1px solid #ffffff10;
-        box-shadow: 0 0 30px #000;
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
     }
 
-    .gustos-section h2 {
-        margin-top: 0;
-    }
-
-    .btn-gustos {
+    .btn-custom {
         display: inline-block;
         margin-top: 20px;
-        padding: 12px 22px;
-        background: #222;
-        border-radius: 8px;
-        color: #eee;
+        padding: 12px 24px;
+        background: var(--accent);
+        color: var(--bg);
+        border-radius: var(--radius);
         text-decoration: none;
-        border: 1px solid #ffffff25;
+        font-weight: 800;
+        text-transform: uppercase;
         transition: 0.2s;
     }
 
-    .btn-gustos:hover {
-        background: #333;
-        border-color: #ffffff40;
+    .btn-custom:hover {
+        filter: brightness(0.8);
     }
 </style>
-</head>
 
-<body>
-
-<div class="hero">
+<div class="hero-profile">
     <div class="avatar-box">
         <img src="{{ persona.avatar_url }}" alt="Foto de {{ persona.nombre }}">
         <h1 style="margin-top: 15px; font-size: 1.6rem;">{{ persona.nombre }}</h1>
     </div>
 </div>
 
-<div class="content">
+<div class="profile-content">
     
-    <h2 style="margin-bottom: 10px;">{{ datos.titulo }}</h2>
-    <p>{{ datos.texto }}</p>
+    <h2 style="margin-bottom: 15px;">{{ datos.titulo }}</h2>
+    <p style="color: var(--muted); max-width: 800px;">{{ datos.texto }}</p>
+
+    {% if session.user_id %}
+        <a class="btn" style="font-size: 0.7rem; margin-top: 10px;"
+           href="{{ url_for('admin_editar', tabla='contenido', item_id=2) }}">
+            EDITAR TEXTO GENERAL
+        </a>
+    {% endif %}
 
     <div class="info-grid">
-        
         <div class="info-card">
             <h3>Quién soy</h3>
-            <p>{{ persona.descripcion }}</p>
+            <p style="line-height: 1.8;">{{ persona.descripcion }}</p>
         </div>
 
         <div class="info-card">
@@ -125,24 +123,23 @@
             <p><strong>Edad:</strong> {{ persona.edad }} años</p>
             <p><strong>País:</strong> {{ persona.pais }}</p>
             <p><strong>Ocupación:</strong> {{ persona.ocupacion }}</p>
+            
+            {% if session.user_id %}
+                <a class="btn" style="font-size: 0.7rem; margin-top: 20px; display: block; text-align: center;"
+                   href="{{ url_for('admin_editar', tabla='datos_personales', item_id=1) }}">
+                    EDITAR DATOS PERSONALES
+                </a>
+            {% endif %}
         </div>
-
     </div>
->
+
     <div class="gustos-section">
         <h2>Mis gustos</h2>
-        <p>
-            Mis gustos son una parte enorme de quién soy: mi estética, mis influencias,
-            mis obsesiones artísticas, mis géneros favoritos y mis mundos internos.
-            Si querés ver en detalle todo lo que me forma —mis categorías, rankings,
-            análisis y colecciones— podés entrar acá:
+        <p style="color: var(--muted);">
+            Mi identidad visual y sonora: categorías, rankings y colecciones personales.
         </p>
-
-        <a href="/gustos" class="btn-gustos">Ver mis gustos en detalle →</a>
+        <a href="/gustos" class="btn-custom">Ver en detalle →</a>
     </div>
 
 </div>
-
-</body>
-</html>
 {% endblock %}

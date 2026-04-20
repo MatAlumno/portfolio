@@ -61,7 +61,7 @@ def login_required(f):
 # -------------------
 def obtener_contenido(seccion):
     db = get_db()
-    with db.cursor(dictionary=True) as c:
+    with db.cursor() as c:
         c.execute("SELECT titulo, texto, seccion FROM contenido WHERE seccion=%s", (seccion,))
         return c.fetchone()
 
@@ -74,9 +74,9 @@ def manos():
 @app.route("/inicio")
 def inicio():
     db = get_db()
-    page = obtener_contenido("index") or {}
+    page = obtener_contenido("inicio") or {}
 
-    with db.cursor(dictionary=True) as c:
+    with db.cursor() as c:
         c.execute("SELECT * FROM datos_personales LIMIT 1")
         persona = c.fetchone()
 
@@ -87,7 +87,7 @@ def sobre_mi():
     db = get_db()
     page = obtener_contenido("sobre_mi") or {}
 
-    with db.cursor(dictionary=True) as c:
+    with db.cursor() as c:
         c.execute("SELECT * FROM datos_personales LIMIT 1")
         persona = c.fetchone()
 
@@ -97,7 +97,7 @@ def sobre_mi():
 def blog():
     db = get_db()
 
-    with db.cursor(dictionary=True) as c:
+    with db.cursor() as c:
         c.execute("SELECT * FROM posts ORDER BY fecha DESC")
         posts = c.fetchall()
         c.execute("SELECT * FROM posts_multimedia")
@@ -122,7 +122,7 @@ def personal():
     db = get_db()
     page = obtener_contenido("personal") or {}
     #Carlitos al rescate
-    with db.cursor(dictionary=True) as c:
+    with db.cursor() as c:
 
         c.execute("SELECT * FROM habilidades ORDER BY tipo, nivel DESC, nombre ASC")
         habilidades = c.fetchall()
@@ -163,7 +163,7 @@ def personal():
 def trayecto():
     db = get_db()
     page = obtener_contenido("trayecto") or {}
-    with db.cursor(dictionary=True) as c:
+    with db.cursor() as c:
         c.execute("SELECT * FROM trayecto ORDER BY fecha_inicio DESC")
         lista = c.fetchall()
     return render_template("trayecto.html", datos=page, trayecto=lista)
@@ -172,7 +172,7 @@ def trayecto():
 def proyectos():
     db = get_db()
     page = obtener_contenido("proyectos") or {}
-    with db.cursor(dictionary=True) as c:
+    with db.cursor() as c:
         c.execute("SELECT * FROM proyectos")
         lista = c.fetchall()
     return render_template("proyectos.html", datos=page, proyectos=lista)
@@ -182,7 +182,7 @@ def gustos():
     db = get_db()
     page = obtener_contenido("gustos") or {}
 
-    with db.cursor(dictionary=True) as c:
+    with db.cursor() as c:
         c.execute("SELECT * FROM gustos_categorias ORDER BY id ASC")
         categorias = c.fetchall()
 
@@ -210,7 +210,7 @@ def login():
         username = request.form.get("username")
         password = request.form.get("password")
         db = get_db()
-        with db.cursor(dictionary=True) as c:
+        with db.cursor() as c:
             c.execute("SELECT * FROM usuarios WHERE username=%s", (username,))
             user = c.fetchone()
         if user and check_password_hash(user["password_hash"], password):
@@ -248,7 +248,7 @@ def admin_listado(tabla):
     if tabla not in TABLAS_CONFIG:
         abort(404)
     db = get_db()
-    with db.cursor(dictionary=True) as c:
+    with db.cursor() as c:
         c.execute(f"SELECT * FROM {tabla}")
         filas = c.fetchall()
     return render_template("admin_listado.html", tabla=tabla, filas=filas, config=TABLAS_CONFIG[tabla])
@@ -299,7 +299,7 @@ def admin_eliminar(tabla, row_id):
 @login_required
 def admin_editar(tabla, item_id):
     db = get_db()
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
 
     cursor.execute(f"DESCRIBE {tabla}")
     columnas = cursor.fetchall()
@@ -336,7 +336,7 @@ def admin_editar(tabla, item_id):
 @login_required
 def admin_contenido_editar(seccion):
     db = get_db()
-    with db.cursor(dictionary=True) as c:
+    with db.cursor() as c:
         c.execute("SELECT * FROM contenido WHERE seccion=%s", (seccion,))
         fila = c.fetchone()
 

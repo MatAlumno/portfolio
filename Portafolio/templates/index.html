@@ -12,6 +12,12 @@
     <div class="intro-text" style="flex: 2 1 300px;">
         <h2 style="margin-bottom: 1rem;">{{ datos.titulo }}</h2>
         <p style="line-height: 1.6; padding-bottom: 3rem;">{{ datos.texto }}</p>
+        {% if session.user_id %}
+            <a
+                href="{{ url_for('admin_editar', tabla='contenido', item_id=1) }}">
+                Editar esta sección
+            </a>
+        {% endif %}
         <hr >
         <div class="extra-info" style="padding-top: 3rem;">
             <h3>Sobre mí</h3>
@@ -23,15 +29,15 @@
                 <li><strong>Ocupacion:</strong> {{ persona.ocupacion }}</li>
             </ul>
         </div>
+        {% if session.user_id %}
+            <a
+                href="{{ url_for('admin_editar', tabla='datos_personales', item_id=1) }}">
+                Editar esta secciónnnn
+            </a>
+        {% endif %}
     </div>
 
 </div>
 
-{% if session.user_id %}
-<a class="btn btn-warning btn-sm"
-    href="{{ url_for('admin_contenido_editar', seccion='index') }}">
-    Editar esta sección
-</a>
-{% endif %}
 
 {% endblock %}
